@@ -28,7 +28,7 @@ function Map(){
   }, []);
 
   return (
-    <Container component="map" ref={mapElement} maxWidth={false} sx={{width: 1, height: 1, m: 0, p: 0}}></Container>
+    <Container ref={mapElement} maxWidth={false} sx={{width: 1, height: 1, m: 0, p: 0}}></Container>
   );
 };
 
