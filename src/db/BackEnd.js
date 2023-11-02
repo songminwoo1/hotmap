@@ -1,8 +1,11 @@
-import { write, append } from './Firebase'
+import * as DB from './Firebase';
 
-export function Test()
-{
-    write('testvalue/', {some:'not-a-data'});
-    append('testarr/', ['m1', 'm2', 'm3']);
-    return 42;
-}
+export const AddWhiteboardStamp = (board_id, x_coord, y_coord, data, onpush) =>
+    DB.append('whiteboard/' + board_id, {
+        x: x_coord,
+        y: y_coord,
+        data: data
+    },onpush);
+
+export const LoadWhiteboard = (board_id, onload) =>
+    DB.read('whiteboard/' + board_id, onload);

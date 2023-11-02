@@ -17,25 +17,27 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
 const firebaseDB = getDatabase(app);
 
-export function write(key_path, value) {
-    set(ref(firebaseDB, key_path), value);
+export function write(key_path, value, onpush = ()=>{}) {
+  set(ref(firebaseDB, key_path), value)
+  .then(() => {
+    onpush();
+  });
 }
 
-export function append(key_path, value) {
-    set(push(ref(firebaseDB, key_path)), value);
+export function append(key_path, value, onpush = ()=>{}) {
+  set(push(ref(firebaseDB, key_path)), value)
+  .then(() => {
+    onpush();
+  });
 }
 
-export function read(key_path) {
-  get(child(firebaseDB, key_path)).then((snapshot) => {
-    if (snapshot.exists()) {
-      return snapshot.val();
-    } else {
-      return null;
-    }
-  }).catch((error) => {
-    return null;
+export function read(key_path, onload) {
+  get(child(ref(firebaseDB), key_path)).then((snapshot) => {
+    onload(snapshot.val());
+  })
+  .catch((error) => {
+    onload(null);
   });
 }
