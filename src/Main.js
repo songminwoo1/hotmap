@@ -1,5 +1,6 @@
 import Map from "./Map";
 import Whiteboard from "./whiteboard/Whiteboard";
+import AddPlace from "./AddPlace";
 
 import { useState } from "react";
 
@@ -7,7 +8,7 @@ import { Box, Button, Container } from "@mui/material";
 
 function TopUI({age, setAge, gender, setGender}){
   return(
-    <Container maxWidth={false} style={{position: 'absolute', padding: 0}} sx={{zIndex: 1500, width: 1, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+    <Container maxWidth={false} style={{position: 'absolute', padding: 0}} sx={{zIndex: 1100, width: 1, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
       <Box component="img" src="Logo.png"></Box>
       <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
         <Button variant ="contained" sx={{mr: 2, borderRadius: 30, bgcolor: age=='under-age' ? '#DDDDDD':'white', ':hover':{bgcolor: '#DDDDDD'}, color: 'black', fontSize: 16}} onClick={()=>{setAge('under-age')}}>Under-Age</Button>
@@ -28,6 +29,7 @@ function Main(){
       <TopUI age={age} setAge={setAge} gender={gender} setGender={setGender}></TopUI>
       <Map></Map>
       <Whiteboard></Whiteboard>
+      <AddPlace></AddPlace>
     </Container>
   );
 }
