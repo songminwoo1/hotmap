@@ -1,47 +1,46 @@
 import { Box, Container } from '@mui/material';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { AddWhiteboardStamp, LoadWhiteboard } from '../db/BackEnd';
 import './Whiteboard.css';
 import { Stamp } from './Stamp';
 
-// const AddStamp = (updateaction) => (event) => {
-//   const container = document.querySelector('.whiteboard');
-//   const div = document.createElement('div');
-//   div.className = 'created-div';
-  
-//   // Set the position of the div to the click coordinates
-//   let bound = container.getBoundingClientRect();
-//   div.style.left = (event.clientX - bound.left) + 'px';
-//   div.style.top = (event.clientY - bound.top) + 'px';
-//   container.appendChild(div);
-
-//   AddWhiteboardStamp('testboard1',
-//     (event.clientX - bound.left) / (bound.right - bound.left),
-//     (event.clientY - bound.top) / (bound.bottom - bound.top),
-//     'stamp!',
-//     updateaction
-//   );
-// };
-
-const PutStamp = (whiteboardid, updateCallback, targetWhiteboard) => (clickEvent) => {
-  console.log('eulisse: ' + whiteboardid);
+const PutStamp = 
+  (whiteboardid, updateCallback) => 
+  (clickEvent) => 
+{
+  const x_coord = clickEvent.nativeEvent.offsetX;
+  const y_coord = clickEvent.nativeEvent.offsetY;
+  console.log('origin x: ' + x_coord);
+  console.log('origin y: ' + y_coord);
+  AddWhiteboardStamp
+  (
+    whiteboardid, x_coord, y_coord, 'stamp_data',
+    updateCallback
+  );
 };
 
 function Whiteboard(props){
+  const boardRef = useRef(null);
   const [stamps, setStamps] = useState({
-    A1: {x:0.3, y:0.5, data:'carrot'},
-    A2: {x:0.5, y:0.5, data:'dango'},
-    A3: {x:0.7, y:0.5, data:'egg'},
-    A4: {x:0.5, y:0.2, data:'frog'},
-    A5: {x:0.5, y:0.8, data:'grape'},
+    updated: false,
   });
 
-  return <div className="whiteboard" onClick={PutStamp(props.whiteboardid, setStamps, this)}>
+  const updateBoard = () => {
+    LoadWhiteboard
+    (
+      props.whiteboardid,
+      (new_board_data) => setStamps(new_board_data)//when the new board data arrived
+    );
+  };
+
+  if('updated' in stamps) {updateBoard();};
+
+  return <div className="whiteboard" ref={boardRef} onClick={PutStamp(props.whiteboardid, updateBoard)}>
     <h1>Whiteboard</h1>
     {
       Object.entries(stamps).map( 
-        (it, index) => (
-          Stamp(it[0], it[1])
+        (entry) => (
+          Stamp(entry[0], entry[1])
         )
       )
     }
