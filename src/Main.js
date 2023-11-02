@@ -1,4 +1,5 @@
 import Map from "./Map";
+import Whiteboard from "./whiteboard/Whiteboard";
 
 import { useState } from "react";
 
@@ -26,6 +27,7 @@ function Main(){
     <Container style={{minWidth: "100vw", width: "100vw", height: "100vh", padding: 0}} sx={{}}>
       <TopUI age={age} setAge={setAge} gender={gender} setGender={setGender}></TopUI>
       <Map></Map>
+      <Whiteboard></Whiteboard>
     </Container>
   );
 }
