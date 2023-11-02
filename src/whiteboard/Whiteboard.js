@@ -1,4 +1,3 @@
-import { Box, Container } from '@mui/material';
 import { useState, useRef } from 'react';
 import { AddWhiteboardStamp, LoadWhiteboard } from '../db/BackEnd';
 import './Whiteboard.css';
@@ -10,8 +9,6 @@ const PutStamp =
 {
   const x_coord = clickEvent.nativeEvent.offsetX;
   const y_coord = clickEvent.nativeEvent.offsetY;
-  console.log('origin x: ' + x_coord);
-  console.log('origin y: ' + y_coord);
   AddWhiteboardStamp
   (
     whiteboardid, x_coord, y_coord, 'stamp_data',
