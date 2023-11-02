@@ -8,4 +8,16 @@ export const AddWhiteboardStamp = (board_id, x_coord, y_coord, data, onpush) =>
     },onpush);
 
 export const LoadWhiteboard = (board_id, onload) =>
-    DB.read('whiteboard/' + board_id, onload);
+    DB.read('whiteboard/' + board_id, 
+        (data) => 
+        {
+            if (data == null) 
+            {
+                onload({});
+            }
+            else
+            {
+                onload(data);
+            }
+        }
+    );
