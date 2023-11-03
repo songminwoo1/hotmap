@@ -21,3 +21,7 @@ export const LoadWhiteboard = (board_id, onload) =>
             }
         }
     );
+
+export const LogAll = () => DB.read('/',
+    (data) => console.log(data)
+    );
