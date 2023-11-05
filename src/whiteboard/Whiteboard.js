@@ -25,6 +25,20 @@ function Whiteboard(props){
   const [stamps, setStamps] = useState({
     updated: false,
   });
+  const [xMain, setxMain] = useState(0);
+  const [yMain, setyMain] = useState(0);
+  
+  const handleMouseMove = (e) => {
+    // Using pageX and pageY will cause glitching when you scroll the window down
+    // because it measures the distance from the top left rendered corner, not
+    // top left visible corner
+    const clientX = e.nativeEvent.offsetX;
+    const clientY = e.nativeEvent.offsetY;
+
+    // we set the main circle coordinates as soon as the mouse is moved
+    setxMain(clientX);
+    setyMain(clientY);
+  };
 
   const updateBoard = () => {
     LoadWhiteboard
@@ -36,8 +50,8 @@ function Whiteboard(props){
 
   if('updated' in stamps) {updateBoard();};
 
-  return <div id='qf81f7' className="whiteboard" ref={boardRef} onClick={PutStamp(props.whiteboardid, updateBoard)}>
-    <h1>Whiteboard</h1>
+  return <div id='wbcont'>
+    <div id='qf81f7' className="whiteboard" ref={boardRef} onMouseMove={(e) => handleMouseMove(e)} onClick={PutStamp(props.whiteboardid, updateBoard)}></div>
     {
       Object.entries(stamps).map( 
         (entry) => (
@@ -45,6 +59,11 @@ function Whiteboard(props){
         )
       )
     }
+    <div 
+      id='wbcursor'
+    >
+      {Stamp(0, {x:xMain, y:yMain, data:STAMP_DATA})}
+    </div>
   </div>;
 };
 
