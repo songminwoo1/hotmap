@@ -3,7 +3,7 @@ import { AddWhiteboardStamp, LoadWhiteboard } from '../db/BackEnd';
 import './Whiteboard.css';
 import { Stamp } from './Stamp';
 
-export var STAMP_DATA = 'smile'; //assign different value for different stamp.
+export var STAMP_DATA = 'thumbsup'; //assign different value for different stamp.
 
 const PutStamp = 
   (whiteboardid, updateCallback) =>
@@ -27,6 +27,7 @@ function Whiteboard(props){
   });
   const [xMain, setxMain] = useState(0);
   const [yMain, setyMain] = useState(0);
+  const [isAbove, setIsAbove] = useState(true);
   
   const handleMouseMove = (e) => {
     // Using pageX and pageY will cause glitching when you scroll the window down
@@ -51,7 +52,7 @@ function Whiteboard(props){
   if('updated' in stamps) {updateBoard();};
 
   return <div id='wbcont'>
-    <div id='qf81f7' className="whiteboard" ref={boardRef} onMouseMove={(e) => handleMouseMove(e)} onClick={PutStamp(props.whiteboardid, updateBoard)}></div>
+    <div id='qf81f7' className="whiteboard" ref={boardRef} onMouseEnter={()=>setIsAbove(true)} onMouseLeave={()=>setIsAbove(false)} onMouseMove={(e) => handleMouseMove(e)} onClick={PutStamp(props.whiteboardid, updateBoard)}></div>
     {
       Object.entries(stamps).map( 
         (entry) => (
@@ -62,7 +63,7 @@ function Whiteboard(props){
     <div 
       id='wbcursor'
     >
-      {Stamp(0, {x:xMain, y:yMain, data:STAMP_DATA})}
+      {(isAbove) ? Stamp(0, {x:xMain, y:yMain, data:STAMP_DATA}) : null}
     </div>
   </div>;
 };

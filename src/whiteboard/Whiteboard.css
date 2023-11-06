@@ -10,9 +10,20 @@
 
 #wbcursor {
     opacity: 0.3;
-    border-width: 1px;
+    border-width: 2px;
     border-style: solid;
+    border-color: black;
     z-index: 10000;
+    animation: cursorenter 0.3s ease-in;
+}
+
+@keyframes cursorenter {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.3
+    }
 }
 
 .whiteboard {
@@ -27,7 +38,7 @@
     position:absolute;
     width: 1px;
     height: 1px;
-    z-index: 9999;
+    z-index: 9000;
     overflow: visible;
     align-items: center;
     align-content: center;
