@@ -1,7 +1,7 @@
 import { Box, Container, } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { openAddPlace } from './slice';
+import { openAddPlace, openWhiteboard } from './slice';
 
 var map = null;
 const naver = window.naver;
@@ -55,6 +55,20 @@ function Map(){
 
     //클릭 시 마커 추가 이벤트
     naver.maps.Event.addListener(map, 'click', (e)=>{addMarker(e, dispatch)})
+
+
+    //사이드바를 불러오는 임시 이벤트
+    naver.maps.Event.addListener(map, 'keydown', function(e) {
+      var keyboardEvent = e.keyboardEvent,
+          keyCode = keyboardEvent.keyCode || keyboardEvent.which;
+
+
+      if (keyCode === 48) {
+          keyboardEvent.preventDefault();
+          dispatch(openWhiteboard());
+
+      }
+    });
 
   }, []);
   //https://navermaps.github.io/maps.js.ncp/docs/tutorial-Visualization.html
