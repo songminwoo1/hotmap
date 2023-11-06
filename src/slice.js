@@ -9,6 +9,9 @@ export const sidebarSlice = createSlice({
     closeSidebar: (state) => {
       state.sidebarState = 'none';
     },
+    readyAddPlace: (state) => {
+      state.sidebarState = 'ready'
+    },
     openAddPlace: (state) => {
       state.sidebarState = 'addplace';
     },
@@ -20,6 +23,7 @@ export const sidebarSlice = createSlice({
 
 export const {
   closeSidebar,
+  readyAddPlace,
   openAddPlace,
   openWhiteboard
 } = sidebarSlice.actions

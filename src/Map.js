@@ -1,13 +1,14 @@
 import { Box, Container, } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { openAddPlace } from './slice';
+import { useSelector, useDispatch } from 'react-redux';
+import { readyAddPlace, openAddPlace } from './slice';
 
 var map = null;
 const naver = window.naver;
 
+
 function addMarker(e, dispatch){
-  dispatch(openAddPlace());
+  dispatch(readyAddPlace());
   var marker = new naver.maps.Marker({
     position: e.coord,
     map: map
@@ -18,8 +19,9 @@ function addMarker(e, dispatch){
 function Map(){
   const [markers, setMarkers] = useState([]);
   const dispatch = useDispatch();
-
   const mapElement = useRef(null);
+  const sidebarState = useSelector(state => state.sidebar.sidebarState);
+  const clickCoordinate = useRef(null);
 
   useEffect(() => {
     if (!mapElement.current || !naver) return;
@@ -54,14 +56,25 @@ function Map(){
     }
 
     //클릭 시 마커 추가 이벤트
-    naver.maps.Event.addListener(map, 'click', (e)=>{addMarker(e, dispatch)})
+    naver.maps.Event.addListener(map, 'click', (e)=>{
+      dispatch(readyAddPlace())
+      clickCoordinate.current = e.coord;
+    });
 
   }, []);
   //https://navermaps.github.io/maps.js.ncp/docs/tutorial-Visualization.html
 
 
   return (
-    <Container ref={mapElement} maxWidth={false} sx={{width: 1, height: 1, m: 0, p: 0}}></Container>
+    <Container ref={mapElement} maxWidth={false} sx={{width: 1, height: 1, m: 0, p: 0}}>
+      {sidebarState === 'addplace' && clickCoordinate.current && (
+        // Render a marker at the initial click coordinates
+        new naver.maps.Marker({
+          position: clickCoordinate.current,
+          map: map,
+        })
+      )}
+    </Container>
   );
 };
 

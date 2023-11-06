@@ -1,4 +1,4 @@
-import { closeSidebar } from "./slice";
+import { closeSidebar, openAddPlace } from "./slice";
 
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -12,7 +12,7 @@ function AddPlace() {
   const sidebar  = useSelector(state => state.sidebar.sidebarState);
 
   return (
-    <Modal open={sidebar==='addplace'} onClose={() => dispatch(closeSidebar())}> 
+    <Modal open={sidebar==='ready'} onClose={() => dispatch(closeSidebar())}> 
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
       <Box 
         sx={{
@@ -34,7 +34,7 @@ function AddPlace() {
         <Box style={{ marginTop: '20px', marginLeft: '10px'}} >
           <TextField 
             helperText="Explain this Hot Place (Optional)"
-            label = "Explanation" 
+            label = "Explanation"
             variant = "outlined"
             rows={4}
             maxRows={4}
@@ -44,7 +44,17 @@ function AddPlace() {
         <IconButton onClick={() => dispatch(closeSidebar())} style={{position: 'absolute', top: '10px', right: '10px'}}>
           <CloseIcon />
         </IconButton>
-        <Button variant="outlined" style={{position: 'absolute', bottom: '10px', right: '10px', color: '#FF6666', borderColor: '#FF6666'}}>
+        <Button 
+          variant="outlined" 
+          style={{
+            position: 'absolute', 
+            bottom: '10px', 
+            right: '10px', 
+            color: '#FF6666', 
+            borderColor: '#FF6666'
+          }}
+          onClick={() => {dispatch(openAddPlace())}}
+        >
           Add Pin
         </Button>
       </Box>
