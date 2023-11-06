@@ -1,5 +1,6 @@
 import Map from "./Map";
 import Whiteboard from "./whiteboard/Whiteboard";
+import Whiteboard1 from "./Whiteboard";
 import AddPlace from "./AddPlace";
 
 import { useState } from "react";
@@ -29,6 +30,7 @@ function Main(){
       <TopUI age={age} setAge={setAge} gender={gender} setGender={setGender}></TopUI>
       <Map></Map>
       <Whiteboard whiteboardid='change-this-to-load-different-board'></Whiteboard>
+      <Whiteboard1></Whiteboard1>
       <AddPlace></AddPlace>
     </Container>
   );

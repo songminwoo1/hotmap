@@ -1,7 +1,7 @@
 import { Box, Container, } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { readyAddPlace, openAddPlace } from './slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { openAddPlace, openWhiteboard, readyAddPlace } from './slice';
 
 var map = null;
 const naver = window.naver;
@@ -59,6 +59,20 @@ function Map(){
     naver.maps.Event.addListener(map, 'click', (e)=>{
       dispatch(readyAddPlace())
       clickCoordinate.current = e.coord;
+    });
+
+
+    //사이드바를 불러오는 임시 이벤트
+    naver.maps.Event.addListener(map, 'keydown', function(e) {
+      var keyboardEvent = e.keyboardEvent,
+          keyCode = keyboardEvent.keyCode || keyboardEvent.which;
+
+
+      if (keyCode === 48) {
+          keyboardEvent.preventDefault();
+          dispatch(openWhiteboard());
+
+      }
     });
 
   }, []);

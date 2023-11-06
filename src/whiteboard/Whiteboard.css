@@ -1,17 +1,76 @@
-.whiteboard {
+#wbcont {
     position: relative;
+    width: 1000px;
+    height: 600px;
+    border-width: 1px;
+    border-style: solid;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#wbcursor {
+    opacity: 0.3;
     border-width: 2px;
     border-style: solid;
-    min-width: 100vw;
-    min-height: 100vh;
-    width: 100vw;
-    height: 100vh;
-    z-index: 9999;
+    border-color: black;
+    z-index: 10000;
+    animation: cursorenter 0.3s ease-in;
+}
+
+@keyframes cursorenter {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.3
+    }
+}
+
+.whiteboard {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 10001;
 }
 
 .stamp {
     position:absolute;
-    width: 100px;
-    height: 100px;
-    z-index: 10000;
+    width: 1px;
+    height: 1px;
+    z-index: 9000;
+    overflow: visible;
+    align-items: center;
+    align-content: center;
+}
+
+.j7fk3 {
+    position:absolute;
+    width: 120px;
+    height: 120px;
+    left: -60px;
+    top: -60px;
+    overflow: visible;
+    align-items: center;
+    align-content: center;
+    animation: fall 0.4s ease-in;
+}
+
+@keyframes fall {
+    0% {
+        /*top: -20px; /* */
+        opacity: 0;
+        width: 160px;
+        height: 160px;
+        left: -80px;
+        top: -110px;
+    }
+    100% {
+        /*top: 0; /* Adjust the value for how far the div should fall */
+        opacity: 1;
+        width: 120px;
+        height: 120px;
+        left: -60px;
+        top: -60px;
+    }
 }
