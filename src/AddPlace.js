@@ -55,7 +55,7 @@ function AddPlace() {
           }}
           onClick={() => {dispatch(openAddPlace())}}
         >
-          Add Pin
+          Add Place
         </Button>
       </Box>
       </div>

@@ -1,19 +1,10 @@
 import { Box, Container, } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { openAddPlace, openWhiteboard, readyAddPlace } from './slice';
+import { closeSidebar, openAddPlace, openWhiteboard, readyAddPlace } from './slice';
 
 var map = null;
 const naver = window.naver;
-
-
-function addMarker(e, dispatch){
-  dispatch(readyAddPlace());
-  var marker = new naver.maps.Marker({
-    position: e.coord,
-    map: map
-  });
-}
 
 //https://4sii.tistory.com/424
 function Map(){
@@ -21,7 +12,7 @@ function Map(){
   const dispatch = useDispatch();
   const mapElement = useRef(null);
   const sidebarState = useSelector(state => state.sidebar.sidebarState);
-  const clickCoordinate = useRef(null);
+  const [temporaryLocation, setTemporaryLocation] = useState(null);
 
   useEffect(() => {
     if (!mapElement.current || !naver) return;
@@ -55,10 +46,10 @@ function Map(){
       });
     }
 
-    //클릭 시 마커 추가 이벤트
-    naver.maps.Event.addListener(map, 'click', (e)=>{
-      dispatch(readyAddPlace())
-      clickCoordinate.current = e.coord;
+    //클릭 시 핫플 추가 창
+    naver.maps.Event.addListener(map, 'click', (e) => {
+      dispatch(readyAddPlace());
+      setTemporaryLocation(e.coord);
     });
 
 
@@ -81,13 +72,18 @@ function Map(){
 
   return (
     <Container ref={mapElement} maxWidth={false} sx={{width: 1, height: 1, m: 0, p: 0}}>
-      {sidebarState === 'addplace' && clickCoordinate.current && (
-        // Render a marker at the initial click coordinates
-        new naver.maps.Marker({
-          position: clickCoordinate.current,
-          map: map,
-        })
-      )}
+      {sidebarState === 'addplace' && temporaryLocation && (() => {
+      // Add a marker at the temporarily saved location
+      const marker = new naver.maps.Marker({
+        position: temporaryLocation,
+        map,
+      });
+
+      // Change the state to 'none' after adding the pin
+      dispatch(closeSidebar());
+      // Clear the temporary location
+      setTemporaryLocation(null);
+    })()}
     </Container>
   );
 };
