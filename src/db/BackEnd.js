@@ -29,3 +29,18 @@ export const LogAll = () =>
 
 export const AddPin = (data, onpush) => 
     DB.append('pin/', data, onpush);
+
+export const GetPinList = (onload) =>
+    DB.read('pin/',
+        (data) =>
+        {
+            if (data == null) 
+            {
+                onload([]);
+            }
+            else
+            {
+                onload(Object.values(data));
+            }
+        }
+    );
