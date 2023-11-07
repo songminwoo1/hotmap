@@ -5,21 +5,6 @@ import { Stamp } from './Stamp';
 
 export var STAMP_DATA = 'thumbsup'; //assign different value for different stamp.
 
-const PutStamp = 
-  (whiteboardid, updateCallback) =>
-  (clickEvent) => 
-{
-  if (clickEvent.target.id != 'qf81f7')
-    return;
-  const x_coord = clickEvent.nativeEvent.offsetX;
-  const y_coord = clickEvent.nativeEvent.offsetY;
-  AddWhiteboardStamp
-  (
-    whiteboardid, x_coord, y_coord, STAMP_DATA,
-    updateCallback
-  );
-};
-
 function Whiteboard(props){
   const boardRef = useRef(null);
   const [stamps, setStamps] = useState({
@@ -28,6 +13,19 @@ function Whiteboard(props){
   const [xMain, setxMain] = useState(0);
   const [yMain, setyMain] = useState(0);
   const [isAbove, setIsAbove] = useState(true);
+  
+  const PutStamp = (clickEvent) => 
+  {
+    if (clickEvent.target.id != 'qf81f7')
+      return;
+    const x_coord = clickEvent.nativeEvent.offsetX;
+    const y_coord = clickEvent.nativeEvent.offsetY;
+    AddWhiteboardStamp
+    (
+      props.whiteboardid, x_coord, y_coord, STAMP_DATA,
+      updateBoard
+    );
+  };
   
   const handleMouseMove = (e) => {
     // Using pageX and pageY will cause glitching when you scroll the window down
@@ -52,7 +50,7 @@ function Whiteboard(props){
   if('updated' in stamps) {updateBoard();};
 
   return <div id='wbcont'>
-    <div id='qf81f7' className="whiteboard" ref={boardRef} onMouseEnter={()=>setIsAbove(true)} onMouseLeave={()=>setIsAbove(false)} onMouseMove={(e) => handleMouseMove(e)} onClick={PutStamp(props.whiteboardid, updateBoard)}></div>
+    <div id='qf81f7' className="whiteboard" ref={boardRef} onMouseEnter={()=>setIsAbove(true)} onMouseLeave={()=>setIsAbove(false)} onMouseMove={(e) => handleMouseMove(e)} onClick={PutStamp}></div>
     {
       Object.entries(stamps).map( 
         (entry) => (
