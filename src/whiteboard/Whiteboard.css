@@ -1,9 +1,10 @@
 #wbcont {
+    background: transparent;
     position: relative;
-    width: 1000px;
-    height: 600px;
-    border-width: 1px;
-    border-style: solid;
+    width: 100%;
+    height: 100%;
+    /* border-width: 1px;
+    border-style: solid; */
     overflow: hidden;
     cursor: pointer;
 }
@@ -27,6 +28,7 @@
 }
 
 .whiteboard {
+    background: transparent;
     position: relative;
     width: 100%;
     height: 100%;
