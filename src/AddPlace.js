@@ -7,6 +7,8 @@ import { Box, Button, IconButton, Modal, TextField } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import NotListedLocationIcon from '@mui/icons-material/NotListedLocation';
 
+import { AddPin } from "./db/BackEnd";
+
 function AddPlace() {
   const dispatch = useDispatch();
   const sidebar  = useSelector(state => state.sidebar.sidebarState);
@@ -53,7 +55,9 @@ function AddPlace() {
             color: '#FF6666', 
             borderColor: '#FF6666'
           }}
-          onClick={() => {dispatch(openAddPlace())}}
+          onClick={() => AddPin(
+            {data:'dummy'},
+          () => dispatch(openAddPlace()))}
         >
           Add Place
         </Button>

@@ -22,6 +22,10 @@ export const LoadWhiteboard = (board_id, onload) =>
         }
     );
 
-export const LogAll = () => DB.read('/',
+export const LogAll = () => 
+    DB.read('/',
     (data) => console.log(data)
     );
+
+export const AddPin = (data, onpush) => 
+    DB.append('pin/', data, onpush);
