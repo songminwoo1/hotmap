@@ -46,6 +46,22 @@ function Map(){
       });
     }
 
+    //열지도 추가
+    console.log('dot');
+    var data = [
+      new naver.maps.LatLng(36.3721427,127.360394),
+      new naver.maps.LatLng(36.3741427,127.360394),
+      new naver.maps.LatLng(36.3771427,127.360394),
+      new naver.maps.LatLng(36.3711427,127.360394),
+      new naver.maps.LatLng(36.3781427,127.360394),
+    ];
+    naver.maps.onJSContentLoaded = function() {
+      var heatmap = new naver.maps.visualization.HeatMap({
+          map: map,
+          data: data
+      });
+    };
+
     //클릭 시 핫플 추가 창
     naver.maps.Event.addListener(map, 'click', (e) => {
       dispatch(readyAddPlace());
