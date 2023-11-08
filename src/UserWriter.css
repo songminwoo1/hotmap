@@ -1,0 +1,9 @@
+#topbar {
+    border: solid 1px;
+}
+
+#post-main {
+    padding-top: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+}

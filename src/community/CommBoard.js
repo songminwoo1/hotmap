@@ -34,7 +34,6 @@ function getTimeIntervalString(startDate, endDate) {
 }
 
 function CommBoard(props) {
-    console.log(props.data);
     return <Box sx={{padding: '5px'}}>
 <Stack direction="column" spacing={0.5}>
 {

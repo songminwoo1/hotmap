@@ -1,7 +1,7 @@
 import Whiteboard from "./whiteboard/Whiteboard";
 import { closeSidebar } from "./slice";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { Box, Modal, Chip, Stack } from "@mui/material";
@@ -41,15 +41,10 @@ function Sidebar(props) {
   });
 
   let comm_interest = {};
-  Object.entries(community).map( 
-    ([key, value]) => 
-    {
-      if(value.place != place.name)
-        return;
-
+  for (const [key, value] of Object.entries(community)) {
+    if(value.place === place.name)
       comm_interest[key] = value;
-    }
-  );
+  }
 
   return (
     <Modal open={sidebar==='whiteboard'} onClose={() => dispatch(closeSidebar())}
@@ -71,6 +66,7 @@ function Sidebar(props) {
                 ([key, value]) => 
                 (
                   <Chip 
+                    key={key}
                     color="primary" variant="outlined"
                     sx={{
                       height: 'auto',
@@ -91,7 +87,7 @@ function Sidebar(props) {
             <CommBoard data={comm_interest}/>
           </Box>
 
-          <Box sx={{width: '100%', height: '25%', bgcolor: 'ivory'}}>
+          <Box sx={{width: '100%', height: '25%', bgcolor: 'white'}}>
             <UserWriter/>
           </Box>
 

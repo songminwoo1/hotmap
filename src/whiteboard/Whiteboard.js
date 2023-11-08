@@ -1,10 +1,30 @@
 import { useState, useRef } from 'react';
 import { AddWhiteboardStamp, LoadWhiteboard } from '../db/BackEnd';
 import './Whiteboard.css';
-import { Stamp } from './Stamp';
+import Stamp from './Stamp';
 import background from "./blkboard.png";
 
 export var STAMP_DATA = 'thumbsup'; //assign different value for different stamp.
+
+const stamp_list = ['thumbsup', 'smile'];
+var current_stamp_number = 0;
+
+const stamp_roll_forward = () => {
+  current_stamp_number += 1;
+
+  if(stamp_list.length == current_stamp_number)
+    current_stamp_number = 0;
+
+  STAMP_DATA = stamp_list[current_stamp_number];
+}
+const stamp_roll_backward = () => {
+  current_stamp_number -= 1;
+
+  if(-1 == current_stamp_number)
+    current_stamp_number = stamp_list.length - 1;
+  
+  STAMP_DATA = stamp_list[current_stamp_number];
+}
 
 function Whiteboard(props){
   const boardRef = useRef(null);
@@ -14,6 +34,7 @@ function Whiteboard(props){
   const [xMain, setxMain] = useState(0);
   const [yMain, setyMain] = useState(0);
   const [isAbove, setIsAbove] = useState(true);
+  const [stampCursor, setStampCursor] = useState(STAMP_DATA);
   
   const PutStamp = (clickEvent) => 
   {
@@ -42,6 +63,16 @@ function Whiteboard(props){
     setyMain(clientY);
   };
 
+  const handleWheelRoll = (e) => {
+    if(e.deltaY > 0) {
+      stamp_roll_forward();
+      setStampCursor(STAMP_DATA);
+    }else {
+      stamp_roll_backward();
+      setStampCursor(STAMP_DATA);
+    }
+  }
+
   const updateBoard = () => {
     LoadWhiteboard
     (
@@ -53,18 +84,24 @@ function Whiteboard(props){
   if('updated' in stamps) {updateBoard();};
 
   return <div id='wbcont' style={{backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
-    <div id='qf81f7' className="whiteboard" ref={boardRef} onMouseEnter={()=>setIsAbove(true)} onMouseLeave={()=>setIsAbove(false)} onMouseMove={(e) => handleMouseMove(e)} onClick={PutStamp}></div>
+    <div id='qf81f7' className="whiteboard" ref={boardRef} 
+      onMouseEnter={()=>setIsAbove(true)} 
+      onMouseLeave={()=>setIsAbove(false)} 
+      onMouseMove={handleMouseMove} 
+      onWheel={handleWheelRoll}
+      onClick={PutStamp}
+    />
     {
       Object.entries(stamps).map( 
-        (entry) => (
-          Stamp(entry[0], entry[1])
+        ([key, value]) => (
+          Stamp(key, value)
         )
       )
     }
     <div 
       id='wbcursor'
     >
-      {(isAbove) ? Stamp(0, {x:xMain, y:yMain, data:STAMP_DATA}) : null}
+      {(isAbove) ? Stamp(0, {x:xMain, y:yMain, data:stampCursor}) : null}
     </div>
   </div>;
 };

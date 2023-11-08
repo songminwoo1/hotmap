@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 import StampContent from './Content/StampContent';
 
-export function Stamp(id, item) {
+function Stamp(id, item) {
     if(item == false)
         return <></>;
 
@@ -24,3 +24,5 @@ export function Stamp(id, item) {
         </Box>
     </div>;
 }
+
+export default Stamp;
