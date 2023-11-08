@@ -2,6 +2,8 @@ import { Box, Container, } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeSidebar, openAddPlace, openWhiteboard, readyAddPlace } from './slice';
+import { AddPin, GetPinList } from "./db/BackEnd";
+import * as db from './db/BackEnd';
 
 var map = null;
 const naver = window.naver;
@@ -68,7 +70,6 @@ function Map(){
       setTemporaryLocation(e.coord);
     });
 
-
     //사이드바를 불러오는 임시 이벤트
     naver.maps.Event.addListener(map, 'keydown', function(e) {
       var keyboardEvent = e.keyboardEvent,
@@ -78,28 +79,32 @@ function Map(){
       if (keyCode === 48) {
           keyboardEvent.preventDefault();
           dispatch(openWhiteboard());
-
       }
     });
 
   }, []);
-  //https://navermaps.github.io/maps.js.ncp/docs/tutorial-Visualization.html
 
-
-  return (
-    <Container ref={mapElement} maxWidth={false} sx={{width: 1, height: 1, m: 0, p: 0}}>
-      {sidebarState === 'addplace' && temporaryLocation && (() => {
+  useEffect(() => {
+    if(sidebarState === 'addplace' && temporaryLocation) {
       // Add a marker at the temporarily saved location
       const marker = new naver.maps.Marker({
         position: temporaryLocation,
         map,
       });
-
       // Change the state to 'none' after adding the pin
-      dispatch(closeSidebar());
-      // Clear the temporary location
-      setTemporaryLocation(null);
-    })()}
+      AddPin({data: temporaryLocation}, () => {
+        dispatch(closeSidebar());
+        setTemporaryLocation(null);
+      });
+    }
+  }, [sidebarState, temporaryLocation]);
+
+  
+  //https://navermaps.github.io/maps.js.ncp/docs/tutorial-Visualization.html
+
+
+  return (
+    <Container ref={mapElement} maxWidth={false} sx={{width: 1, height: 1, m: 0, p: 0}}>
     </Container>
   );
 };

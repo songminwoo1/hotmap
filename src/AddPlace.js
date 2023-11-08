@@ -7,7 +7,7 @@ import { Box, Button, IconButton, Modal, TextField } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import NotListedLocationIcon from '@mui/icons-material/NotListedLocation';
 
-import { AddPin } from "./db/BackEnd";
+
 
 function AddPlace() {
   const dispatch = useDispatch();
@@ -18,8 +18,8 @@ function AddPlace() {
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
       <Box 
         sx={{
-          width: 300,
-          height: 300,
+          width: 340,
+          height: 70,
           bgcolor: '#FFF4EC',
           borderRadius: 2,
           boxShadow: 3,
@@ -27,40 +27,28 @@ function AddPlace() {
           display: 'flex',
           flexDirection: 'column',  // To align items vertically
           alignItems: 'center',    // To center vertically
+          justifyContent: 'center',
         }} //outer box of Add Pin modal
       >
-        <Box sx={{ display: 'flex', alignItems: 'flex-end' }} style={{ marginTop: '20px', marginRight: '20px' }}> 
-          <NotListedLocationIcon sx={{ color: '#FF6666', mr: 1, my: 0.5 }} />
-          <TextField id="entername" label="Name of Hot Place" variant="standard" /> 
-        </Box>  
-        <Box style={{ marginTop: '20px', marginLeft: '10px'}} >
-          <TextField 
-            helperText="Explain this Hot Place (Optional)"
-            label = "Explanation"
-            variant = "outlined"
-            rows={4}
-            maxRows={4}
-            multiline
-          />
+        
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '90%' }}> 
+          <div style={{ display: 'flex', alignItems: 'flex-end', marginBottom: '15px'}}>
+            <NotListedLocationIcon sx={{ color: '#FF6666', mr: 1, my: 0.5 }} />
+            <TextField id="entername" label="Name of Hot Place" variant="standard" />
+          </div>
+          <Button 
+            variant="outlined" 
+            sx={{ height: '35px' }}
+            style={{
+              float: "right",
+              color: '#FF6666', 
+              borderColor: '#FF6666',
+            }}
+            onClick={() => { dispatch(openAddPlace()) }}
+          >
+            Add
+          </Button>
         </Box>
-        <IconButton onClick={() => dispatch(closeSidebar())} style={{position: 'absolute', top: '10px', right: '10px'}}>
-          <CloseIcon />
-        </IconButton>
-        <Button 
-          variant="outlined" 
-          style={{
-            position: 'absolute', 
-            bottom: '10px', 
-            right: '10px', 
-            color: '#FF6666', 
-            borderColor: '#FF6666'
-          }}
-          onClick={() => AddPin(
-            {data:'dummy'},
-          () => dispatch(openAddPlace()))}
-        >
-          Add Place
-        </Button>
       </Box>
       </div>
     </Modal>
