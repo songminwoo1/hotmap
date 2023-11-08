@@ -28,7 +28,7 @@ function Main(){
     <Container style={{minWidth: "100vw", width: "100vw", height: "100vh", padding: 0}} sx={{}}>
       <TopUI age={age} setAge={setAge} gender={gender} setGender={setGender}></TopUI>
       <Map></Map>
-      <Sidebar></Sidebar>
+      <Sidebar pinId={'someid000'}></Sidebar>
       <AddPlace></AddPlace>
     </Container>
   );

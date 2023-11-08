@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Dongle:wght@300;400&display=swap');
+
+#bar-title {
+    font-family: 'Dongle', sans-serif;
+    font-weight: 400;
+    font-size: 40px;
+    padding: 5px;
+    padding-bottom: 0;
+    text-align: center;
+}

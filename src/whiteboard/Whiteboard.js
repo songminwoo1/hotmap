@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { AddWhiteboardStamp, LoadWhiteboard } from '../db/BackEnd';
 import './Whiteboard.css';
 import { Stamp } from './Stamp';
+import background from "./blkboard.png";
 
 export var STAMP_DATA = 'thumbsup'; //assign different value for different stamp.
 
@@ -51,7 +52,7 @@ function Whiteboard(props){
 
   if('updated' in stamps) {updateBoard();};
 
-  return <div id='wbcont'>
+  return <div id='wbcont' style={{backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
     <div id='qf81f7' className="whiteboard" ref={boardRef} onMouseEnter={()=>setIsAbove(true)} onMouseLeave={()=>setIsAbove(false)} onMouseMove={(e) => handleMouseMove(e)} onClick={PutStamp}></div>
     {
       Object.entries(stamps).map( 
