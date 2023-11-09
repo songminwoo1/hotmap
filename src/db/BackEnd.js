@@ -36,11 +36,11 @@ export const GetPinList = (onload) =>
         {
             if (data == null) 
             {
-                onload([]);
+                onload({});
             }
             else
             {
-                onload(Object.values(data));
+                onload(data);
             }
         }
     );
