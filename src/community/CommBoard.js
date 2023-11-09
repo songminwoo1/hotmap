@@ -1,7 +1,7 @@
 import { Stack, Box, Paper, Grid, Divider } from "@mui/material";
 
 import './CommBoard.css';
-import Slice from "../slice";
+import Slice from "../sliceSidebar";
 
 function getTimeIntervalString(startDate, endDate) {
   const millisecondsPerSecond = 1000;

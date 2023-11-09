@@ -1,4 +1,4 @@
-import { closeSidebar, openAddPlace } from "./slice";
+import { closeSidebar, openAddPlace } from "./sliceSidebar";
 
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";

@@ -1,5 +1,5 @@
 import Whiteboard from "./whiteboard/Whiteboard";
-import { closeSidebar } from "./slice";
+import { closeSidebar } from "./sliceSidebar";
 
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -20,6 +20,11 @@ function Sidebar(props) {
     name: '참치아울렛 만년점',
     tags: {sushi:32, quiet:15, expensive: 10}, //must be sorted when set.
   });
+  
+  //디버깅용.
+  const  lookingPlace  = useSelector(state => state.lookingPlace.lookingPlaceState);
+  console.log(lookingPlace);
+
   const [community, setCommunity] = useState({
     // deadbeef: {
     //   pinId: 'f1920dj2',
