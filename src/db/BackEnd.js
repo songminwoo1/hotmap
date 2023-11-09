@@ -44,3 +44,20 @@ export const GetPinList = (onload) =>
             }
         }
     );
+
+export const AddCommunityPost = (data, onload) =>
+    DB.append('community/', data, onload);
+    
+export const GetCommunity = (onload) => 
+DB.read('community/',
+    (data) => 
+    {
+        if(data == null)
+        {
+            onload({});
+        }
+        else {
+            onload(data);
+        }
+    }
+);

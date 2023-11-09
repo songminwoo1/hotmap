@@ -9,6 +9,8 @@ import CommBoard from "./community/CommBoard";
 import UserWriter from "./UserWriter";
 import './Sidebar.css';
 
+import { GetCommunity } from "./db/BackEnd";
+
 function Sidebar(props) {
   const dispatch = useDispatch();
   const  sidebar  = useSelector(state => state.sidebar.sidebarState);
@@ -18,6 +20,7 @@ function Sidebar(props) {
   });
   const [community, setCommunity] = useState({
     deadbeef: {
+      pinId: 'f1920dj2',
       place: '참치아울렛 만년점',
       title: 'new menu',
       body: 'The new menu "rosted carrot" was so good',
@@ -25,6 +28,7 @@ function Sidebar(props) {
       level: 42,
     },
     deadbee0: {
+      pinId: 'f1920dj2',
       place: '참치아울렛 만년점',
       title: 'cat 고양이 고양이 고양이 고양이 고양이 고양이 고양이 고양이 고양이 고양이',
       body: 'was sleeping under the window. 고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이',
@@ -32,6 +36,7 @@ function Sidebar(props) {
       level: 25,
     },
     beef1001: {
+      pinId: 'f83jh1u1',
       place: '칠구치킨',
       title: 'no potato',
       body: 'gimme da potato',
@@ -40,11 +45,7 @@ function Sidebar(props) {
     }
   });
 
-  let comm_interest = {};
-  for (const [key, value] of Object.entries(community)) {
-    if(value.place === place.name)
-      comm_interest[key] = value;
-  }
+  const update = () => GetCommunity((data)=>setCommunity(data));
 
   return (
     <Modal open={sidebar==='whiteboard'} onClose={() => dispatch(closeSidebar())}
@@ -54,9 +55,9 @@ function Sidebar(props) {
         <Box sx={{width: '75%', height: 1, bgcolor: 'transparent'}}>
           <Whiteboard whiteboardid='change-this-to-load-different-board'></Whiteboard>
         </Box>
-        <Box sx={{width: '25%', height: 1, bgcolor: 'white', flexDirection: 'column'}}>
+        <Box sx={{width: '25%', minWidth:'300px', height: 1, bgcolor: 'white', flexDirection: 'column'}}>
 
-          <Box sx={{width: '100%', height: '15%', margin: '0', padding: '0', justifyContent: 'flex'}}>
+          <Box sx={{width: '100%', height: '15%', minHeight: '100px', margin: '0', padding: '0', justifyContent: 'flex'}}>
             <Box id='bar-title' sx={{width: '100%', bgcolor: 'white'}}>
               {place.name}
             </Box>
@@ -83,12 +84,17 @@ function Sidebar(props) {
             </Stack>
           </Box>
 
-          <Box sx={{width: '100%', height: '60%', bgcolor: 'lightblue'}}>
-            <CommBoard data={comm_interest}/>
+          <Box sx={{width: 'calc(100% + 17px)', height: 'calc(85% - 245px)', bgcolor: 'lightblue',
+            overflowY:'scroll'
+          }}>
+            <CommBoard data={community} condition={(post)=>
+            {
+              return true;
+            }}/>
           </Box>
 
-          <Box sx={{width: '100%', height: '25%', bgcolor: 'white'}}>
-            <UserWriter/>
+          <Box sx={{width: '100%', height: '245px', backgroundColor:'ivory'}}>
+            <UserWriter pinId={'carrot'} place={place.name} refresh={update} />
           </Box>
 
         </Box>

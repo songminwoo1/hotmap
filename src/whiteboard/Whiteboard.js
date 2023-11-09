@@ -5,6 +5,7 @@ import Stamp from './Stamp';
 import background from "./blkboard.png";
 
 export var STAMP_DATA = 'thumbsup'; //assign different value for different stamp.
+export const getCurrentLevel = () => 42;
 
 const stamp_list = ['thumbsup', 'smile', 'berry', 'bluebird', 'boss', 'catturtle', 'cloudsmile', 'cube', 'hmm', 'mild-thumbs', 'monkey', 'party', 'popcorn'];
 var current_stamp_number = 0;

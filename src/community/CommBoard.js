@@ -33,12 +33,23 @@ function getTimeIntervalString(startDate, endDate) {
   }
 }
 
+function sort_by_key(array, key)
+{
+ return array.sort(function(a, b)
+ {
+  var x = a[key]; var y = b[key];
+  return ((x > y) ? -1 : ((x < y) ? 1 : 0));
+ });
+}
+
 function CommBoard(props) {
-    return <Box sx={{padding: '5px'}}>
+  console.log(props);
+
+  return <Box sx={{padding: '5px'}}>
 <Stack direction="column" spacing={0.5}>
 {
-Object.entries(props.data).map(
-    ([key, value]) => 
+sort_by_key(Object.values(props.data), 'time').map(
+    (value) => 
     <Paper elevation={1} sx={{
         width: '100%', 
         overflow: 'auto',
