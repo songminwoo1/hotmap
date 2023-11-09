@@ -43,13 +43,12 @@ function sort_by_key(array, key)
 }
 
 function CommBoard(props) {
-  console.log(props);
 
   return <Box sx={{padding: '5px'}}>
 <Stack direction="column" spacing={0.5}>
 {
 sort_by_key(Object.values(props.data), 'time').map(
-    (value) => 
+    (value) => props.condition(value) ? (
     <Paper elevation={1} sx={{
         width: '100%', 
         overflow: 'auto',
@@ -78,7 +77,7 @@ sort_by_key(Object.values(props.data), 'time').map(
                 </Box>
             </Box>
         </Box>
-    </Paper>
+    </Paper>) : null
 )
 }
 </Stack>
