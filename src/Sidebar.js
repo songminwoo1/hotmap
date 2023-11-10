@@ -23,7 +23,8 @@ function Sidebar(props) {
   
   //디버깅용.
   const  lookingPlace  = useSelector(state => state.lookingPlace.lookingPlaceState);
-  console.log(lookingPlace);
+  const  lookingMarker  = useSelector(state => state.lookingPlace.lookingMarkerState);
+  console.log(lookingPlace, lookingMarker);
 
   const [community, setCommunity] = useState({
     // deadbeef: {
