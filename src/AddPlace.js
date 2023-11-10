@@ -12,6 +12,7 @@ import NotListedLocationIcon from '@mui/icons-material/NotListedLocation';
 function AddPlace() {
   const dispatch = useDispatch();
   const sidebar  = useSelector(state => state.sidebar.sidebarState);
+  const [text, setText] = useState("");
 
   return (
     <Modal open={sidebar==='ready'} onClose={() => dispatch(closeSidebar())}> 
@@ -34,7 +35,13 @@ function AddPlace() {
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '90%' }}> 
           <div style={{ display: 'flex', alignItems: 'flex-end', marginBottom: '15px'}}>
             <NotListedLocationIcon sx={{ color: '#FF6666', mr: 1, my: 0.5 }} />
-            <TextField id="entername" label="Name of Hot Place" variant="standard" />
+            <TextField 
+              id="entername" 
+              label="Name of Hot Place" 
+              variant="standard" 
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
           </div>
           <Button 
             variant="outlined" 
@@ -44,7 +51,10 @@ function AddPlace() {
               color: '#FF6666', 
               borderColor: '#FF6666',
             }}
-            onClick={() => { dispatch(openAddPlace()) }}
+            onClick={() => {
+              dispatch(openAddPlace(text));
+              setText("");
+            }}
           >
             Add
           </Button>

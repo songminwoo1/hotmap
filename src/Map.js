@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { closeSidebar, openAddPlace, openWhiteboard, readyAddPlace } from './sliceSidebar';
 import { setLookingPlace } from './sliceLookingPlace';
 import { AddPin, GetPinList } from "./db/BackEnd";
+import AddPlace from './AddPlace';
 import * as db from './db/BackEnd';
 
 var map = null;
@@ -21,6 +22,7 @@ function Map(){
   const dispatch = useDispatch();
   const mapElement = useRef(null);
   const sidebarState = useSelector(state => state.sidebar.sidebarState);
+  const text = useSelector(state => state.sidebar.text);
   const [temporaryLocation, setTemporaryLocation] = useState(null);
 
   useEffect(() => {
@@ -91,10 +93,13 @@ function Map(){
         map,
       });
       // Change the state to 'none' after adding the pin
-      AddPin({data: temporaryLocation}, () => {
+      
+      AddPin({name: text, LatLng: temporaryLocation}, () => {
+        GetPinList(()=>{});
         dispatch(closeSidebar());
         setTemporaryLocation(null);
       });
+      
     }
   }, [sidebarState, temporaryLocation]);
 

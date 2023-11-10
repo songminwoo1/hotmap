@@ -36,6 +36,10 @@ export function append(key_path, value, onpush = ()=>{}) {
 export function read(key_path, onload) {
   get(child(ref(firebaseDB), key_path)).then((snapshot) => {
     onload(snapshot.val());
+    console.log("snapval: ");
+    console.log(snapshot.val());
+    console.log("snapshot: ");
+    console.log(snapshot);
   })
   .catch((error) => {
     onload(null);

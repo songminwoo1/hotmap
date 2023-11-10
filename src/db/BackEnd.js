@@ -33,7 +33,9 @@ export const AddPin = (data, onpush) =>
 export const GetPinList = (onload) =>
     DB.read('pin/',
         (data) =>
-        {
+        {   
+            console.log("Pin List: ");
+            console.log(data);
             if (data == null) 
             {
                 onload({});
