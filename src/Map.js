@@ -1,24 +1,36 @@
 import { Box, Container, } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { closeSidebar, openAddPlace, openWhiteboard, readyAddPlace } from './slice';
+import { closeSidebar, openAddPlace, openWhiteboard, readyAddPlace } from './sliceSidebar';
+import { setLookingPlace } from './sliceLookingPlace';
 import { AddPin, GetPinList } from "./db/BackEnd";
+import AddPlace from './AddPlace';
 import * as db from './db/BackEnd';
 
 var map = null;
 const naver = window.naver;
 
+//pin definition
+var tmp = [
+  {'ID': 1234, 'name': '한기원', 'LatLng': {'x': 127.360221, 'y': 36.3954377, '_lat': 36.3954377, '_lng': 127.360221}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.355221, 'y': 36.3854377, '_lat': 36.3954377, '_lng': 127.360221}},
+]
+
 //https://4sii.tistory.com/424
 function Map(){
-  const [markers, setMarkers] = useState([]);
+  const [markers, setMarkers] = useState(tmp);
   const dispatch = useDispatch();
   const mapElement = useRef(null);
   const sidebarState = useSelector(state => state.sidebar.sidebarState);
+  const text = useSelector(state => state.sidebar.text);
   const [temporaryLocation, setTemporaryLocation] = useState(null);
 
   useEffect(() => {
-    if (!mapElement.current || !naver) return;
+    //파이어베이스에서 데이터 받기
+    //GetPinList((data)=>setMarkers(data));
 
+    
+    if (!mapElement.current || !naver) return;
 
     // 지도에 표시할 위치의 위도와 경도 좌표를 파라미터로 넣어줍니다.
     const location = new naver.maps.LatLng(36.3721427, 127.36039);
@@ -36,17 +48,6 @@ function Map(){
 
     //지도 생성
     map = new naver.maps.Map(mapElement.current, mapOptions);
-
-    //마커 추가
-    console.log(markers);
-    setMarkers([{"lat": 36.3721427, "lng": 127.36039}, {"lat": 36.3731427, "lng": 127.36039}]);
-    for(var marker of markers){
-      console.log(marker);
-      new naver.maps.Marker({
-        position: new naver.maps.LatLng(marker.lat, marker.lng),
-        map,
-      });
-    }
 
     //열지도 추가
     console.log('dot');
@@ -92,15 +93,33 @@ function Map(){
         map,
       });
       // Change the state to 'none' after adding the pin
-      AddPin({data: temporaryLocation}, () => {
+      
+      AddPin({name: text, LatLng: temporaryLocation}, () => {
+        GetPinList(()=>{});
         dispatch(closeSidebar());
         setTemporaryLocation(null);
       });
+      
     }
   }, [sidebarState, temporaryLocation]);
 
-  
-  //https://navermaps.github.io/maps.js.ncp/docs/tutorial-Visualization.html
+  //마커 추가. 파이어 베이스에서 DB를 받은 후에 실행 됨
+  useEffect(() => {
+    //마커 추가
+    console.log(markers);
+    for(var marker of markers){
+      if(marker.data=='dummy') continue;
+      console.log(marker)
+      var m = new naver.maps.Marker({
+        position: marker.LatLng,
+        map,
+      });
+      naver.maps.Event.addListener(m, 'click', ()=>{
+        dispatch(openWhiteboard());
+        dispatch(setLookingPlace({m, marker}));
+      });
+    }
+  }, [markers]);
 
 
   return (

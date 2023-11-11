@@ -4,6 +4,7 @@ export const sidebarSlice = createSlice({
   name: 'sidebar',
   initialState: {
     sidebarState: 'none',
+    text: '',
   },
   reducers: {
     closeSidebar: (state) => {
@@ -12,8 +13,9 @@ export const sidebarSlice = createSlice({
     readyAddPlace: (state) => {
       state.sidebarState = 'ready'
     },
-    openAddPlace: (state) => {
+    openAddPlace: (state, action) => {
       state.sidebarState = 'addplace';
+      state.text = action.payload;
     },
     openWhiteboard: (state) => {
       state.sidebarState = 'whiteboard';
