@@ -2,9 +2,8 @@ import { Box, Container, } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeSidebar, openAddPlace, openWhiteboard, readyAddPlace } from './sliceSidebar';
-import { setLookingPlace } from './sliceLookingPlace';
+import { setLookingPlace, setLookingMarker } from './sliceLookingPlace';
 import { AddPin, GetPinList } from "./db/BackEnd";
-import AddPlace from './AddPlace';
 import * as db from './db/BackEnd';
 
 var map = null;
@@ -18,17 +17,15 @@ var tmp = [
 
 //https://4sii.tistory.com/424
 function Map(){
-  const [markers, setMarkers] = useState(tmp);
+  const [places, setPlaces] = useState(tmp);
   const dispatch = useDispatch();
   const mapElement = useRef(null);
   const sidebarState = useSelector(state => state.sidebar.sidebarState);
-  const text = useSelector(state => state.sidebar.text);
   const [temporaryLocation, setTemporaryLocation] = useState(null);
 
   useEffect(() => {
     //파이어베이스에서 데이터 받기
-    //GetPinList((data)=>setMarkers(data));
-
+    //GetPinList((data)=>setPlaces(data));
     
     if (!mapElement.current || !naver) return;
 
@@ -93,34 +90,35 @@ function Map(){
         map,
       });
       // Change the state to 'none' after adding the pin
-      
-      AddPin({name: text, LatLng: temporaryLocation}, () => {
-        GetPinList(()=>{});
+      AddPin({data: temporaryLocation}, () => {
         dispatch(closeSidebar());
         setTemporaryLocation(null);
       });
-      
     }
   }, [sidebarState, temporaryLocation]);
 
   //마커 추가. 파이어 베이스에서 DB를 받은 후에 실행 됨
   useEffect(() => {
-    //마커 추가
-    console.log(markers);
-    for(var marker of markers){
-      if(marker.data=='dummy') continue;
-      console.log(marker)
-      var m = new naver.maps.Marker({
-        position: marker.LatLng,
+    var markers = [];
+
+    for(var i=0; i<places.length; i++){
+      if(places[i].data=='dummy') continue;  //추후 삭제 필요
+      //마커 생성후 마커 리스트에 추가
+      var marker = new naver.maps.Marker({
+        position: places[i].LatLng,
         map,
       });
-      naver.maps.Event.addListener(m, 'click', ()=>{
-        dispatch(openWhiteboard());
-        dispatch(setLookingPlace({m, marker}));
-      });
+      markers.push(marker);
+      function onClickEvent(i){
+        return function(e){
+          dispatch(openWhiteboard());
+          dispatch(setLookingPlace(places[i]));
+          dispatch(setLookingMarker(markers[i]));
+        }
+      };
+      naver.maps.Event.addListener(marker, 'click', onClickEvent(i));
     }
-  }, [markers]);
-
+  }, [places]);
 
   return (
     <Container ref={mapElement} maxWidth={false} sx={{width: 1, height: 1, m: 0, p: 0}}>
