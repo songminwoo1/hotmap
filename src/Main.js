@@ -5,7 +5,7 @@ import AddPlace from "./AddPlace";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 
-import { Box, Button, Container, FormControlLabel, Modal, Radio, RadioGroup } from "@mui/material";
+import { Box, Button, Container, FormControlLabel, Modal, Radio, RadioGroup, FormLabel, Typography } from "@mui/material";
 
 function TopUI({age, setAge, gender, setGender}){
   return(
@@ -25,6 +25,36 @@ function Main(){
   const [cookies, setCookie, removeCookie] = useCookies(['UID', 'age', 'gender']);
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
+  const radioStyle = {
+    color: '#D8D8D8',
+    '&.Mui-checked': {
+      color: '#FF6666'
+    }
+  };
+  const agelabelPosition = {
+    position: 'relative', 
+    top: '10px', 
+    left: '20px'
+  };
+  const ageradioPosition = {
+    position: 'relative', 
+    top: '10px', 
+    left: '40px'
+  };
+  const genderlabelPosition = {
+    position: 'relative', 
+    top: '20px', 
+    left: '20px'
+  };
+  const genderradioPosition = {
+    position: 'relative', 
+    top: '20px', 
+    left: '40px'
+  };
+  const Labelstyle = {
+    fontSize: '18px',
+    color: '#000000'
+  }
 
 
 
@@ -32,16 +62,33 @@ function Main(){
   return(
     <Container style={{minWidth: "100vw", width: "100vw", height: "100vh", padding: 0}} sx={{}}>
       <Modal open={cookies.UID===undefined} onClose={console.log()} sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <Box sx={{width: 400, height: 300, bgcolor: '#FFF4EC', borderRadius: 2}}>
-          <RadioGroup row defaultValue="under-age" onChange={(e)=>{setCookie('age', e.target.value, {path:'/', maxAge: 365*24*60*60})}}>
-            <FormControlLabel value="under-age" control={<Radio />} label="Under-age" />
-            <FormControlLabel value="adult" control={<Radio />} label="Adult" />
+        <Box sx={{width: 300, height: 275, bgcolor: '#FFF4EC', borderRadius: 2, position: 'relative'}}>
+        <Typography variant="h5" sx={{textAlign: 'center', marginTop: '20px', color: '#000000'}}>
+          Personal Data
+        </Typography>
+        <FormLabel id="age-label" style={agelabelPosition} sx={Labelstyle}>Age</FormLabel>
+          <RadioGroup row onChange={(e)=>{setCookie('age', e.target.value, {path:'/', maxAge: 365*24*60*60})}} style={ageradioPosition}>
+            <FormControlLabel value="under-age" control={<Radio sx={radioStyle} />} label="Under-age" />
+            <FormControlLabel value="adult" control={<Radio sx={radioStyle} />} label="Adult" />
           </RadioGroup>
-          <RadioGroup row defaultValue="man" onChange={(e)=>{setCookie('gender', e.target.value, {path:'/', maxAge: 365*24*60*60})}}>
-            <FormControlLabel value="man" control={<Radio />} label="Man" />
-            <FormControlLabel value="woman" control={<Radio />} label="Woman" />
+        <FormLabel id="gender-label" style={genderlabelPosition} sx={Labelstyle}>Gender</FormLabel>
+          <RadioGroup row onChange={(e)=>{setCookie('gender', e.target.value, {path:'/', maxAge: 365*24*60*60})}} style={genderradioPosition}>
+            <FormControlLabel value="man" control={<Radio sx={radioStyle} />} label="Man" />
+            <FormControlLabel value="woman" control={<Radio sx={radioStyle} />} label="Woman" />
           </RadioGroup>
-          <Button onClick={()=>{setCookie('UID', crypto.randomUUID(), {path:'/', maxAge: 365*24*60*60})}}>Submit</Button>
+          <Button 
+            variant="outlined" 
+            style={{
+              position: 'absolute',
+              bottom: '10px',
+              right: '10px',
+              color: '#FF6666', 
+              borderColor: '#FF6666',
+            }}
+            onClick={()=>{
+              setCookie('UID', crypto.randomUUID(), {path:'/', maxAge: 365*24*60*60})
+            }}
+          >Submit</Button>
         </Box>
       </Modal>
 
