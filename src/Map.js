@@ -11,8 +11,8 @@ const naver = window.naver;
 
 //pin definition
 var tmp = [
-  {'ID': 1234, 'name': '한기원', 'LatLng': {'x': 127.360221, 'y': 36.3954377, '_lat': 36.3954377, '_lng': 127.360221}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.355221, 'y': 36.3854377, '_lat': 36.3954377, '_lng': 127.360221}},
+  {'ID': 1234, 'name': '한기원', 'LatLng': {'x': 127.360221, 'y': 36.3954377, '_lat': 36.3954377, '_lng': 127.360221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.355221, 'y': 36.3854377, '_lat': 36.3954377, '_lng': 127.360221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
 ]
 
 //https://4sii.tistory.com/424
@@ -44,6 +44,7 @@ function Map(){
     };
 
     //지도 생성
+    console.log('gen map');
     map = new naver.maps.Map(mapElement.current, mapOptions);
 
     //열지도 추가
