@@ -4,7 +4,8 @@ import { closeSidebar } from "./slice";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { Box, Modal, Chip, Stack } from "@mui/material";
+import { palette } from '@mui/system';
+import { Box, Modal, Chip, Stack, MenuItem, Avatar } from "@mui/material";
 import CommBoard from "./community/CommBoard";
 import UserWriter from "./UserWriter";
 import './Sidebar.css';
@@ -90,11 +91,23 @@ function Sidebar(props) {
                         whiteSpace: 'normal',
                       },
                     }}
-                    label={key + ' | ' + value} 
+                    label={<div id="chipwrap"><div id="chipplus">+</div> <div id="chipmain">{ key + ' | ' + value }</div> <div id="chipplus">-</div></div>} 
                   />
                 )
               )
             }
+            <Chip
+              color="primary" variant="outlined"
+              sx={{
+                height: 'auto',
+                '& .MuiChip-label': {
+                  display: 'block',
+                  whiteSpace: 'normal',
+                },
+              }}
+            >
+              label={'others'}
+            </Chip>
             </Stack>
             <Box sx={{position:'absolute', bottom:'0px', width:'100%', display:'flex', justifyContent:'center',
               "&:hover": {
