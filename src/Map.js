@@ -12,7 +12,10 @@ const naver = window.naver;
 //pin definition
 var tmp = [
   {'ID': 1234, 'name': '한기원', 'LatLng': {'x': 127.360221, 'y': 36.3954377, '_lat': 36.3954377, '_lng': 127.360221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.355221, 'y': 36.3854377, '_lat': 36.3954377, '_lng': 127.360221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.355221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.355221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.375221, 'y': 36.3744377, '_lat': 36.3744377, '_lng': 127.375221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.335221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.335221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.350221, 'y': 36.3764377, '_lat': 36.3764377, '_lng': 127.350221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
 ]
 
 //https://4sii.tistory.com/424
@@ -23,9 +26,12 @@ function Map(){
   const sidebarState = useSelector(state => state.sidebar.sidebarState);
   const [temporaryLocation, setTemporaryLocation] = useState(null);
 
+  var markers = [];
+
   useEffect(() => {
     //파이어베이스에서 데이터 받기
     //GetPinList((data)=>setPlaces(data));
+    GetPinList((data)=>console.log(data));
     
     if (!mapElement.current || !naver) return;
 
@@ -42,26 +48,43 @@ function Map(){
       zoomControl: true,
       zoomControlOptions: { position: naver.maps.Position.LEFT_BOTTOM }
     };
+    console.log(places);
 
     //지도 생성
-    console.log('gen map');
     map = new naver.maps.Map(mapElement.current, mapOptions);
 
     //열지도 추가
-    console.log('dot');
-    var data = [
-      new naver.maps.LatLng(36.3721427,127.360394),
-      new naver.maps.LatLng(36.3741427,127.360394),
-      new naver.maps.LatLng(36.3771427,127.360394),
-      new naver.maps.LatLng(36.3711427,127.360394),
-      new naver.maps.LatLng(36.3781427,127.360394),
-    ];
+    var data = [];
+    for(var i=0; i<places.length; i++){
+      data.push(new naver.maps.LatLng(places[i].LatLng._lat, places[i].LatLng._lng));
+    }
+    console.log(data);
+    console.log(data);
+    var heatmap = null;
     naver.maps.onJSContentLoaded = function() {
-      var heatmap = new naver.maps.visualization.HeatMap({
+      heatmap = new naver.maps.visualization.HeatMap({
           map: map,
           data: data
       });
     };
+
+    //zoom 정도에 따른 지도 변경
+    naver.maps.Event.addListener(map, 'zoom_changed', function(zoom) {
+      if(zoom<=17){ //show heat map
+        for(var i=0; i<markers.length; i++){
+          markers[i].setOptions({visible: false});
+        }
+        heatmap.setOptions('opacity', 1);
+        
+      }
+      else{ //show marker map
+        for(var i=0; i<markers.length; i++){
+          markers[i].setOptions({visible: true});
+        }
+        heatmap.setOptions('opacity', 0);
+      }
+    });
+
 
     //클릭 시 핫플 추가 창
     naver.maps.Event.addListener(map, 'click', (e) => {
@@ -69,7 +92,7 @@ function Map(){
       setTemporaryLocation(e.coord);
     });
 
-    //사이드바를 불러오는 임시 이벤트
+    //사이드바를 불러오는 임시 이벤트 //삭제 필요
     naver.maps.Event.addListener(map, 'keydown', function(e) {
       var keyboardEvent = e.keyboardEvent,
           keyCode = keyboardEvent.keyCode || keyboardEvent.which;
@@ -100,7 +123,6 @@ function Map(){
 
   //마커 추가. 파이어 베이스에서 DB를 받은 후에 실행 됨
   useEffect(() => {
-    var markers = [];
 
     for(var i=0; i<places.length; i++){
       if(places[i].data=='dummy') continue;  //추후 삭제 필요
@@ -108,6 +130,7 @@ function Map(){
       var marker = new naver.maps.Marker({
         position: places[i].LatLng,
         map,
+        options: {visible: false}
       });
       markers.push(marker);
       function onClickEvent(i){
