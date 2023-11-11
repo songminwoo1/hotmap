@@ -76,10 +76,10 @@ function Sidebar(props) {
         <Box sx={{width: '75%', height: 1, bgcolor: 'transparent'}}>
           <Whiteboard whiteboardid={current_sidebar_pinId}></Whiteboard>
         </Box>
-        <Box sx={{width: '25%', minWidth:'300px', height: 1, bgcolor: 'white', flexDirection: 'column'}}>
+        <Box sx={{width: '25%', minWidth:'300px', height: 1, bgcolor: '#FFF4EC', flexDirection: 'column'}}>
 
           <Box sx={{width: '100%', height: '15%', minHeight: '100px', margin: '0', padding: '0', position:'relative'}}>
-            <Box id='bar-title' sx={{width: '100%', bgcolor: 'white'}}>
+            <Box id='bar-title' sx={{width: '100%', bgcolor: '#FFF4EC'}}>
               {place.name}
             </Box>
             <Stack direction="row" justifyContent="center" spacing={1}>
@@ -92,6 +92,8 @@ function Sidebar(props) {
                     color="primary" variant="outlined"
                     sx={{
                       height: 'auto',
+                      borderColor: '#FF6666',
+                      color: 'black',
                       '& .MuiChip-label': {
                         display: 'block',
                         whiteSpace: 'normal',
@@ -106,6 +108,7 @@ function Sidebar(props) {
               color="primary" variant="outlined"
               sx={{
                 height: 'auto',
+                borderColor: '#FF6666',
                 '& .MuiChip-label': {
                   display: 'block',
                   whiteSpace: 'normal',
@@ -139,7 +142,7 @@ function Sidebar(props) {
             </Box>
           </Box>
 
-          <Box sx={{width: 'calc(100% + 17px)', height: 'calc(85% - 245px)', bgcolor: 'lightblue',
+          <Box sx={{width: 'calc(100% + 17px)', height: 'calc(85% - 230px)', bgcolor: '#FFF4EC',
             overflowY:'scroll'
           }}>
             <CommBoard data={community} condition={(post)=>
@@ -148,7 +151,7 @@ function Sidebar(props) {
             }}/>
           </Box>
 
-          <Box sx={{width: '100%', height: '245px', backgroundColor:'ivory'}}>
+          <Box sx={{width: '100%', height: '230px', backgroundColor:'#FFF4EC'}}>
             <UserWriter pinId={'carrot'} place={place.name} refresh={update} />
           </Box>
 
