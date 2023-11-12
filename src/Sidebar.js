@@ -1,6 +1,7 @@
 import Whiteboard from "./whiteboard/Whiteboard";
 import { closeSidebar } from "./sliceSidebar";
 
+import { useCookies } from "react-cookie";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -36,6 +37,35 @@ const getTopTags = (allTags) =>
 } 
 
 function Sidebar(props) {
+  const [cookies, setCookie, removeCookie] = useCookies(['stampCount']);
+  if(cookies.stampCount===undefined)
+  {
+    console.log("cookie not set");
+    setCookie('stampCount', {}, {path:'/', maxAge: 365*24*60*60});
+  }
+
+  const addStampCookie = (targ_pin) =>
+  {
+    var prev = cookies.stampCount;
+    console.log(cookies);
+    
+    // console.log("prev");
+    // console.log(prev);
+
+    if(prev[targ_pin] === undefined) {
+      prev[targ_pin] = 1;
+    }
+    else
+    {
+      prev[targ_pin] += 1;
+    }
+
+    // console.log("prev");
+    // console.log(prev);
+
+    setCookie('stampCount', prev, {path:'/', maxAge: 365*24*60*60});
+  };
+
   const dispatch = useDispatch();
   const  sidebar  = useSelector(state => state.sidebar.sidebarState);
   const [tags, setTags] = useState(
@@ -85,7 +115,7 @@ function Sidebar(props) {
     >
       <Box sx={{width: '100%', height: 1, bgcolor: 'transparent', display:'flex'}}>
         <Box sx={{width: '75%', height: 1, bgcolor: 'transparent'}}>
-          <Whiteboard whiteboardid={props.pinId}></Whiteboard>
+          <Whiteboard whiteboardid={props.pinId} punch={()=>addStampCookie(props.pinId)}></Whiteboard>
         </Box>
         <Box sx={{width: '25%', minWidth:'450px', height: 1, bgcolor: '#FFF4EC', flexDirection: 'column'}}>
 
@@ -202,7 +232,7 @@ function Sidebar(props) {
           </Box>
 
           <Box sx={{width: '100%', height: '230px', backgroundColor:'#FFF4EC'}}>
-            <UserWriter pinId={props.pinId} place={props.pinName} refresh={update} />
+            <UserWriter pinId={props.pinId} place={props.pinName} refresh={update} level={cookies.stampCount[props.pinId]}/>
           </Box>
 
         </Box>

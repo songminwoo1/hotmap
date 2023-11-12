@@ -54,7 +54,7 @@ function UserWriter(props) {
                                     title: titleRef.current.value,
                                     body: bodyRef.current.value,
                                     time: Date.now(),
-                                    level: getCurrentLevel(),
+                                    level: (props.level !== undefined) ? props.level : 0,
                                 },
                                 props.refresh,
                             );

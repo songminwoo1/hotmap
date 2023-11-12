@@ -45,6 +45,7 @@ function Whiteboard(props){
     const y_coord = clickEvent.nativeEvent.offsetY;
     // Object.assign(stamps, {cur: {x:x_coord, y:y_coord, data:STAMP_DATA}});
     // setStamps(stamps);
+    props.punch();
     AddWhiteboardStamp
     (
       props.whiteboardid, x_coord, y_coord, STAMP_DATA,
