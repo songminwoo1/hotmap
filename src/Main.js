@@ -7,15 +7,15 @@ import { useCookies } from "react-cookie";
 
 import { Box, Button, Container, FormControlLabel, Modal, Radio, RadioGroup } from "@mui/material";
 
-function TopUI({age, setAge, gender, setGender}){
+function TopUI({underage, setUnderage, adult, setAdult, man, setMan, woman, setWoman}){
   return(
     <Container maxWidth={false} style={{position: 'absolute', padding: 0}} sx={{zIndex: 1100, width: 1, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
       <Box component="img" src="Logo.png"></Box>
       <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-        <Button variant ="contained" sx={{mr: 2, borderRadius: 30, bgcolor: age=='under-age' ? '#DDDDDD':'white', ':hover':{bgcolor: '#DDDDDD'}, color: 'black', fontSize: 16}} onClick={()=>{setAge('under-age')}}>Under-Age</Button>
-        <Button variant ="contained" sx={{mr: 2, borderRadius: 30, bgcolor: age=='adult' ? '#DDDDDD':'white', ':hover':{bgcolor: '#DDDDDD'}, color: 'black', fontSize: 16}} onClick={()=>{setAge('adult')}}>Adult</Button>
-        <Button variant ="contained" sx={{mr: 2, borderRadius: 30, bgcolor: gender=='men' ? '#DDDDDD':'white', ':hover':{bgcolor: '#DDDDDD'}, color: 'black', fontSize: 16}} onClick={()=>{setGender('men')}}>Men</Button>
-        <Button variant ="contained" sx={{mr: 2, borderRadius: 30, bgcolor: gender=='women' ? '#DDDDDD':'white', ':hover':{bgcolor: '#DDDDDD'}, color: 'black', fontSize: 16}} onClick={()=>{setGender('women')}}>Women</Button>
+        <Button variant ="contained" sx={{mr: 2, borderRadius: 30, bgcolor: underage ? 'white':'#DDDDDD', ':hover':{bgcolor: '#DDDDDD'}, color: 'black', fontSize: 16}} onClick={()=>{if(underage&&!adult){setAdult(true)}; setUnderage(!underage)}}>Under-Age</Button>
+        <Button variant ="contained" sx={{mr: 2, borderRadius: 30, bgcolor: adult ? 'white':'#DDDDDD', ':hover':{bgcolor: '#DDDDDD'}, color: 'black', fontSize: 16}} onClick={()=>{ if(!underage&&adult){setUnderage(true)}; setAdult(!adult)}}>Adult</Button>
+        <Button variant ="contained" sx={{mr: 2, borderRadius: 30, bgcolor: man ? 'white':'#DDDDDD', ':hover':{bgcolor: '#DDDDDD'}, color: 'black', fontSize: 16}} onClick={()=>{if(man&&!woman){setWoman(true)}; setMan(!man)}}>Men</Button>
+        <Button variant ="contained" sx={{mr: 2, borderRadius: 30, bgcolor: woman ? 'white':'#DDDDDD', ':hover':{bgcolor: '#DDDDDD'}, color: 'black', fontSize: 16}} onClick={()=>{if(!man&&woman){setMan(true)}; setWoman(!woman)}}>Women</Button>
       </Box>
     </Container>
   );
@@ -23,10 +23,10 @@ function TopUI({age, setAge, gender, setGender}){
 
 function Main(){
   const [cookies, setCookie, removeCookie] = useCookies(['UID', 'age', 'gender']);
-  const [age, setAge] = useState('');
-  const [gender, setGender] = useState('');
-
-
+  const [underage, setUnderage] = useState(true);
+  const [adult, setAdult] = useState(true);
+  const [man, setMan] = useState(true);
+  const [woman, setWoman] = useState(true);
 
 
   return(
@@ -45,8 +45,8 @@ function Main(){
         </Box>
       </Modal>
 
-      <TopUI age={age} setAge={setAge} gender={gender} setGender={setGender}></TopUI>
-      <Map></Map>
+      <TopUI underage={underage} setUnderage={setUnderage} adult={adult} setAdult={setAdult} man={man} setMan={setMan} woman={woman} setWoman={setWoman}></TopUI>
+      <Map underage={underage} adult={adult} man={man} woman={woman}></Map>
       <Sidebar pinId={'someid000'}></Sidebar>
       <AddPlace></AddPlace>
     </Container>
