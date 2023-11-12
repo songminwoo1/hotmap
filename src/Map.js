@@ -24,6 +24,7 @@ function Map(){
   const dispatch = useDispatch();
   const mapElement = useRef(null);
   const sidebarState = useSelector(state => state.sidebar.sidebarState);
+  const text = useSelector(state => state.sidebar.text);
   const [temporaryLocation, setTemporaryLocation] = useState(null);
 
   var markers = [];
@@ -114,7 +115,7 @@ function Map(){
         map,
       });
       // Change the state to 'none' after adding the pin
-      AddPin({data: temporaryLocation}, () => {
+      AddPin({name: text, LatLng: temporaryLocation}, () => {
         dispatch(closeSidebar());
         setTemporaryLocation(null);
       });
