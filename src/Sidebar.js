@@ -13,17 +13,45 @@ import CommBoard from "./community/CommBoard";
 import UserWriter from "./UserWriter";
 import './Sidebar.css';
 
-import { GetCommunity, VoteTagUp, VoteTagDown } from "./db/BackEnd";
+import { GetCommunity, VoteTagUp, VoteTagDown, GetTags } from "./db/BackEnd";
 
-export var current_sidebar_pinId = 'carrot';
+const tag_t = ['cozy', 'casual', 'traditional', 'cheap', 'expensive', 'quiet', 'noisy', 'clean', 'dirty', 'night', 'day'];
+
+function sortKeysByValue(obj) {
+  return Object.entries(obj)
+      .sort((a, b) => b[1] - a[1])
+      .map(entry => entry[0]);
+}
+const getTopTags = (allTags) =>
+{
+  const keys = sortKeysByValue(allTags);
+  const topkeys = keys.slice(0, 3);
+
+  var result = {};
+  for(const entry of topkeys)
+  {
+    result[entry] = allTags[entry];
+  }
+  return result;
+} 
 
 function Sidebar(props) {
   const dispatch = useDispatch();
   const  sidebar  = useSelector(state => state.sidebar.sidebarState);
   const [place, setPlace] = useState({
     name: '참치아울렛 만년점',
-    tags: {sushi:32, quiet:15, expensive: 10}, //must be sorted when set.
   });
+  const [tags, setTags] = useState(
+    {none:0} //must be sorted when set
+  )
+  const updateTags = () => {
+    GetTags(props.pinId, setTags);
+  }
+  
+  if(tags["none"] !== undefined)
+  {
+    updateTags();
+  }
   
   //디버깅용.
   // const  lookingPlace  = useSelector(state => state.lookingPlace.lookingPlaceState);
@@ -31,7 +59,7 @@ function Sidebar(props) {
   // console.log("that");
   // console.log(lookingPlace, lookingMarker);
 
-  const [newTag, setNewTag] = useState('other tags');
+  const [newTag, setNewTag] = useState('err');
   const handleChange = (event) => {
     setNewTag(event.target.value);
   };
@@ -52,13 +80,15 @@ function Sidebar(props) {
     update();
   }
 
+  const top_tags = getTopTags(tags);
+
   return (
     <Modal open={sidebar==='whiteboard'} onClose={() => dispatch(closeSidebar())}
       sx={{display: 'flex', flexDirection:'row-reverse'}}
     >
       <Box sx={{width: '100%', height: 1, bgcolor: 'transparent', display:'flex'}}>
         <Box sx={{width: '75%', height: 1, bgcolor: 'transparent'}}>
-          <Whiteboard whiteboardid={current_sidebar_pinId}></Whiteboard>
+          <Whiteboard whiteboardid={props.pinId}></Whiteboard>
         </Box>
         <Box sx={{width: '25%', minWidth:'450px', height: 1, bgcolor: '#FFF4EC', flexDirection: 'column'}}>
 
@@ -68,7 +98,7 @@ function Sidebar(props) {
             </Box>
             <Stack direction="row" justifyContent="center" spacing={1}>
             {
-              Object.entries(place.tags).map( 
+              Object.entries(top_tags).map( 
                 ([key, value]) => 
                 (
                   <Chip 
@@ -83,7 +113,7 @@ function Sidebar(props) {
                         whiteSpace: 'normal',
                       },
                     }}
-                    label={<div id="chipwrap"><div className="chipplus" onClick={()=>VoteTagUp(current_sidebar_pinId, key, props.usrId, ()=>console.log('up'))}><div className="chipplus-in">+</div></div> <div id="chipmain">{ key + '|' + value }</div> <div className="chipplus" onClick={()=>VoteTagDown(current_sidebar_pinId, key, props.usrId, ()=>console.log('up'))}><div className="chipplus-in">-</div></div></div>} 
+                    label={<div id="chipwrap"><div className="chipplus" onClick={()=>VoteTagUp(props.pinId, key, props.usrId, updateTags)}><div className="chipplus-in">+</div></div> <div id="chipmain">{ key + '|' + value }</div> <div className="chipplus" onClick={()=>VoteTagDown(props.pinId, key, props.usrId, updateTags)}><div className="chipplus-in">-</div></div></div>} 
                   />
                 )
               )
@@ -103,7 +133,10 @@ function Sidebar(props) {
                     },
                   }}
                   label={<div id="chipwrap">
-                  <div className="chipplus"><div className="chipplus-in">+</div></div>
+                  <div className="chipplus" onClick={()=>{
+                    if(newTag !== 'err')
+                      VoteTagUp(props.pinId, newTag, props.usrId, updateTags);
+                  }}><div className="chipplus-in">+</div></div>
                   <FormControl variant="standard" sx={{ m: 0, marginLeft:'4px' }} size="small" fontSize="4px">
                     <Select
                       labelId="demo-simple-select-standard-label"
@@ -113,18 +146,30 @@ function Sidebar(props) {
                       label="Age"
                       sx={{fontSize:'12px', fontFamily:"'Roboto Mono', monospace", padding:0, height:'20px', top:'2px'}}
                     >
-                      <MenuItem value={10} fontSize="5px">None</MenuItem>
-                      <MenuItem value={20}>Ten</MenuItem>
-                      <MenuItem value={30}>Twenty</MenuItem>
-                      <MenuItem value={40}>Thirty</MenuItem>
+                      {
+                        tag_t.map(ety => {
+                          if(top_tags[ety] === undefined) {
+                            return <MenuItem value={ety} fontSize="5px">{ety}</MenuItem>;
+                          }
+                          else {
+                            return null;
+                          }
+                        })
+                      }
                     </Select>
                   </FormControl>
-                  <div id="chipsel" className="chipplus"><div className="chipplus-in">|{0}</div></div>
-                  <div className="chipplus"><div className="chipplus-in">-</div></div>
+                  <div id="chipsel"><div>|{
+                    (tags[newTag] === undefined) ? 0 : tags[newTag]
+                  }</div></div>
+                  <div className="chipplus" onClick={()=>{
+                    if(newTag !== 'err')
+                      VoteTagDown(props.pinId, newTag, props.usrId, updateTags);
+                  }}><div className="chipplus-in">-</div></div>
                   </div>} 
                 />
               </div>
             </Box>
+
             {/* <Box sx={{position:'absolute', bottom:'0px', width:'100%', display:'flex', justifyContent:'center',
               "&:hover": {
                 cursor:'pointer',
@@ -147,6 +192,7 @@ function Sidebar(props) {
                 refresh
               </div>
             </Box> */}
+
           </Box>
 
           <Box sx={{width: 'calc(100% + 17px)', height: 'calc(85% - 230px)', bgcolor: '#FFF4EC',
@@ -154,12 +200,12 @@ function Sidebar(props) {
           }}>
             <CommBoard data={community} condition={(post)=>
             {
-              return post.pinId === current_sidebar_pinId;
+              return post.pinId === props.pinId;
             }}/>
           </Box>
 
           <Box sx={{width: '100%', height: '230px', backgroundColor:'#FFF4EC'}}>
-            <UserWriter pinId={'carrot'} place={place.name} refresh={update} />
+            <UserWriter pinId={props.pinId} place={place.name} refresh={update} />
           </Box>
 
         </Box>

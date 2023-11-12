@@ -66,18 +66,27 @@ DB.read('community/',
 
 export const GetTags = (pinId, onload) =>
 DB.read('tags/' + pinId + '/', 
-    (data) => 
+    (data) =>
     {
-        var result = {};
-        for (const [key, value] of Object.entries(data)) { //tag and usr-point object
-            var pt_ac = 0;
-            for (const [usr, pt] of Object.entries(value)) { //tag and usr-point object
-                pt_ac += pt;
+        if(data == null)
+        {
+            onload({});
+        }
+        else
+        {
+            var result = {};
+            for (const [key, value] of Object.entries(data)) { //tag and usr-point object
+                var pt_ac = 0;
+                for (const [usr, pt] of Object.entries(value)) { //tag and usr-point object
+                    pt_ac += pt;
+                }
+                result[key] = pt_ac;
             }
-            result[key] = value
+            onload(result);
         }
     }
 );
+//{sushi:32, quiet:15, expensive: 10}
 
 export const VoteTagUp = (pinId, tag, usrId, onload) =>
     DB.write('tags/' + pinId + '/' + tag + '/' + usrId + '/', 1, onload);
