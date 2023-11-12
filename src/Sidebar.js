@@ -97,7 +97,7 @@ function Sidebar(props) {
                         whiteSpace: 'normal',
                       },
                     }}
-                    label={<div id="chipwrap"><div id="chipplus">+</div> <div id="chipmain">{ key + ' | ' + value }</div> <div id="chipplus">-</div></div>} 
+                    label={<div id="chipwrap"><div className="chipplus"><div className="chipplus-in">+</div></div> <div id="chipmain">{ key + '|' + value }</div> <div className="chipplus"><div className="chipplus-in">-</div></div></div>} 
                   />
                 )
               )
