@@ -48,9 +48,6 @@ function Sidebar(props) {
   {
     var prev = cookies.stampCount;
     console.log(cookies);
-    
-    // console.log("prev");
-    // console.log(prev);
 
     if(prev[targ_pin] === undefined) {
       prev[targ_pin] = 1;
@@ -59,9 +56,6 @@ function Sidebar(props) {
     {
       prev[targ_pin] += 1;
     }
-
-    // console.log("prev");
-    // console.log(prev);
 
     setCookie('stampCount', prev, {path:'/', maxAge: 365*24*60*60});
   };
