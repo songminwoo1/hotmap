@@ -18,6 +18,7 @@
 #chipwrap {
     display: flex;
     height: fit-content;
+    align-items: center;
     
     font-family: 'Roboto Mono', monospace;
     margin: 0;
@@ -32,7 +33,18 @@
     cursor: pointer;
 }
 
+#chipsel {
+    margin-right: 5px;
+    cursor: auto;
+}
+
 #chipmain {
     padding-left: 5px;
     padding-right: 5px;
+}
+
+#tags-dropdown {
+    display: flex;
+    justify-content: center;
+    padding-top: 5px;
 }
