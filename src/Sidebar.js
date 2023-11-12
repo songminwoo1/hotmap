@@ -103,13 +103,17 @@ function Sidebar(props) {
 
   const top_tags = getTopTags(tags);
 
+  const getUserT = () => {
+    return "MR";
+  }
+
   return (
     <Modal open={sidebar==='whiteboard'} onClose={() => dispatch(closeSidebar())}
       sx={{display: 'flex', flexDirection:'row-reverse'}}
     >
       <Box sx={{width: '100%', height: 1, bgcolor: 'transparent', display:'flex'}}>
         <Box sx={{width: '75%', height: 1, bgcolor: 'transparent'}}>
-          <Whiteboard whiteboardid={props.pinId} punch={()=>addStampCookie(props.pinId)}></Whiteboard>
+          <Whiteboard whiteboardid={props.pinId} punch={()=>addStampCookie(props.pinId)} user_t={getUserT()}></Whiteboard>
         </Box>
         <Box sx={{width: '25%', minWidth:'450px', height: 1, bgcolor: '#FFF4EC', flexDirection: 'column'}}>
 

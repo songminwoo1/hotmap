@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { AddWhiteboardStamp, LoadWhiteboard } from '../db/BackEnd';
+import { AddWhiteboardStamp, LoadWhiteboard, AddStampToPin } from '../db/BackEnd';
 import './Whiteboard.css';
 import Stamp from './Stamp';
 import background from "./blkboard.png";
@@ -32,6 +32,17 @@ function Whiteboard(props){
   const [stamps, setStamps] = useState({
     updated: false,
   });
+
+  const updateBoard = () => {
+    LoadWhiteboard
+    (
+      props.whiteboardid,
+      (new_board_data) => setStamps(new_board_data)//when the new board data arrived
+    );
+  };
+
+  if('updated' in stamps) {updateBoard();};
+  
   const [xMain, setxMain] = useState(0);
   const [yMain, setyMain] = useState(0);
   const [isAbove, setIsAbove] = useState(true);
@@ -46,6 +57,7 @@ function Whiteboard(props){
     // Object.assign(stamps, {cur: {x:x_coord, y:y_coord, data:STAMP_DATA}});
     // setStamps(stamps);
     props.punch();
+    AddStampToPin(props.whiteboardid, props.user_t);
     AddWhiteboardStamp
     (
       props.whiteboardid, x_coord, y_coord, STAMP_DATA,
@@ -74,16 +86,6 @@ function Whiteboard(props){
       setStampCursor(STAMP_DATA);
     }
   }
-
-  const updateBoard = () => {
-    LoadWhiteboard
-    (
-      props.whiteboardid,
-      (new_board_data) => setStamps(new_board_data)//when the new board data arrived
-    );
-  };
-
-  if('updated' in stamps) {updateBoard();};
 
   return <div id='wbcont' style={{backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
     <div id='qf81f7' className="whiteboard" ref={boardRef} 
