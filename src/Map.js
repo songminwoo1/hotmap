@@ -29,9 +29,6 @@ function Map({underage, adult, man, woman}){
   const sidebarState = useSelector(state => state.sidebar.sidebarState);
   const text = useSelector(state => state.sidebar.text);
   const [temporaryLocation, setTemporaryLocation] = useState(null);
-  const [hotplace, setHotplace] = useState({
-    updated: false,
-  })
 
   const updatePinList = () => {
     GetPinList((new_pin_data) => {
