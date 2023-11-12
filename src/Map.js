@@ -34,15 +34,15 @@ function Map({underage, adult, man, woman}){
     GetPinList((new_pin_data) => {
       console.log('Updated Pin List:', new_pin_data);
       setPlaces(new_pin_data);
+      console.log('changed places:', places);
     })
   }
-  
 
   
 
   useEffect(() => {
-    //파이어베이스에서 데이터 받기
-    //GetPinList((data)=>setPlaces(data));
+    //파이어베이스에서 데이터 받기S
+    GetPinList((data)=>setPlaces(data));
     GetPinList((data)=>console.log(data));
     
     if (!mapElement.current || !naver) return;
@@ -66,7 +66,7 @@ function Map({underage, adult, man, woman}){
     map = new naver.maps.Map(mapElement.current, mapOptions);
 
     //열지도 추가
-        for(var i=0; i<places.length; i++){
+    for(var i=0; i<places.length; i++){
       var weight = 0;
       if(underage&&man){
         weight+=places[i].stamp.UM;
@@ -134,12 +134,13 @@ function Map({underage, adult, man, woman}){
   useEffect(() => {
     if(sidebarState === 'addplace' && temporaryLocation) {
       // Add a marker at the temporarily saved location
-      const marker = new naver.maps.Marker({
+      const newmarker = new naver.maps.Marker({
         position: temporaryLocation,
         map,
       });
       // Change the state to 'none' after adding the pin
-      AddPin({name: text, LatLng: temporaryLocation}, updatePinList);
+      AddPin({name: text, LatLng: temporaryLocation, stamp: {'under-age': 0, 'adult': 0, 'men': 0, 'women': 0}}, updatePinList);
+      markers.push(newmarker);
       dispatch(closeSidebar());
       setTemporaryLocation(null); //db에서 가져와야 하는 데이터를 state로
     }
@@ -147,19 +148,23 @@ function Map({underage, adult, man, woman}){
 
   //마커 추가. 파이어 베이스에서 DB를 받은 후에 실행 됨
   useEffect(() => {
-    for(var i=0; i<places.length; i++){
-      if(places[i].data=='dummy') continue;  //추후 삭제 필요
+    console.log('places type: ', typeof(places));
+    console.log('place length: ', Object.keys(places).length);
+    var len = Object.keys(places).length;
+    for(var i=0; i<len; i++){
+      if(Object.keys(places)[i].hasOwnProperty('data')) continue;  //추후 삭제 필요
       //마커 생성후 마커 리스트에 추가
       var marker = new naver.maps.Marker({
-        position: places[i].LatLng,
+        position: places[Object.keys(places)[i]].LatLng,
         map,
         options: {visible: false}
       });
       markers.push(marker);
+      console.log("place info:", places[Object.keys(places)[i]].name);
       function onClickEvent(i){
         return function(){
           dispatch(openWhiteboard());
-          dispatch(setLookingPlace(places[i]));
+          dispatch(setLookingPlace(Object.keys(places)[i]));
           dispatch(setLookingMarker(markers[i]));
         }
       };
@@ -170,19 +175,19 @@ function Map({underage, adult, man, woman}){
   useEffect(() => {
     if(heatmap===null) return;
 
-    for(var i=0; i<places.length; i++){
+    for(var i=0; i<Object.keys(places).length; i++){
       var weight = 0;
       if(underage&&man){
-        weight+=places[i].stamp.UM;
+        weight+=places[Object.keys(places)[i]].stamp.UM;
       }
       if(underage&&woman){
-        weight+=places[i].stamp.UW;
+        weight+=places[Object.keys(places)[i]].stamp.UW;
       }
       if(adult&&man){
-        weight+=places[i].stamp.AM;
+        weight+=places[Object.keys(places)[i]].stamp.AM;
       }
       if(adult&&woman){
-        weight+=places[i].stamp.AW;
+        weight+=places[Object.keys(places)[i]].stamp.AW;
       }
       
       weights[i].weight = weight/100000;
