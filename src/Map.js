@@ -7,19 +7,22 @@ import { AddPin, GetPinList } from "./db/BackEnd";
 import * as db from './db/BackEnd';
 
 var map = null;
+var heatmap = null;
+var markers = [];
+var weights = [];
 const naver = window.naver;
 
 //pin definition
 var tmp = [
-  {'ID': 1234, 'name': '한기원', 'LatLng': {'x': 127.360221, 'y': 36.3954377, '_lat': 36.3954377, '_lng': 127.360221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.355221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.355221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.375221, 'y': 36.3744377, '_lat': 36.3744377, '_lng': 127.375221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.335221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.335221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.350221, 'y': 36.3764377, '_lat': 36.3764377, '_lng': 127.350221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
+  {'ID': 1234, 'name': '한기원', 'LatLng': {'x': 127.360221, 'y': 36.3954377, '_lat': 36.3954377, '_lng': 127.360221}, 'stamp': {'UM': 5, 'UW': 7, 'AM': 3, 'AW': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.355221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.355221}, 'stamp': {'UM': 8, 'UW': 12, 'AM': 11, 'AW': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.375221, 'y': 36.3744377, '_lat': 36.3744377, '_lng': 127.375221}, 'stamp': {'UM': 5, 'UW': 17, 'AM': 13, 'AW': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.335221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.335221}, 'stamp': {'UM': 10, 'UW': 9, 'AM': 13, 'AW': 6}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.350221, 'y': 36.3764377, '_lat': 36.3764377, '_lng': 127.350221}, 'stamp': {'UM': 8, 'UW': 4, 'AM': 4, 'AW': 8}},
 ]
 
 //https://4sii.tistory.com/424
-function Map(){
+function Map({underage, adult, man, woman}){
   const [places, setPlaces] = useState(tmp);
   const dispatch = useDispatch();
   const mapElement = useRef(null);
@@ -27,7 +30,8 @@ function Map(){
   const text = useSelector(state => state.sidebar.text);
   const [temporaryLocation, setTemporaryLocation] = useState(null);
 
-  var markers = [];
+  
+  
 
   useEffect(() => {
     //파이어베이스에서 데이터 받기
@@ -49,23 +53,35 @@ function Map(){
       zoomControl: true,
       zoomControlOptions: { position: naver.maps.Position.LEFT_BOTTOM }
     };
-    console.log(places);
 
     //지도 생성
     map = new naver.maps.Map(mapElement.current, mapOptions);
 
     //열지도 추가
-    var data = [];
     for(var i=0; i<places.length; i++){
-      data.push(new naver.maps.LatLng(places[i].LatLng._lat, places[i].LatLng._lng));
+      var weight = 0;
+      if(underage&&man){
+        weight+=places[i].stamp.UM;
+      }
+      if(underage&&woman){
+        weight+=places[i].stamp.UW;
+      }
+      if(adult&&man){
+        weight+=places[i].stamp.AM;
+      }
+      if(adult&&woman){
+        weight+=places[i].stamp.AW;
+      }
+      weights.push(new naver.maps.visualization.WeightedLocation(places[i].LatLng._lat, places[i].LatLng._lng, weight/100000));
     }
-    console.log(data);
-    console.log(data);
-    var heatmap = null;
+
     naver.maps.onJSContentLoaded = function() {
       heatmap = new naver.maps.visualization.HeatMap({
           map: map,
-          data: data
+          data: weights,
+          opacity: 1,
+          radius: 15,
+          colorMap: 'YIOrRd'
       });
     };
 
@@ -76,7 +92,6 @@ function Map(){
           markers[i].setOptions({visible: false});
         }
         heatmap.setOptions('opacity', 1);
-        
       }
       else{ //show marker map
         for(var i=0; i<markers.length; i++){
@@ -124,7 +139,6 @@ function Map(){
 
   //마커 추가. 파이어 베이스에서 DB를 받은 후에 실행 됨
   useEffect(() => {
-
     for(var i=0; i<places.length; i++){
       if(places[i].data=='dummy') continue;  //추후 삭제 필요
       //마커 생성후 마커 리스트에 추가
@@ -135,7 +149,7 @@ function Map(){
       });
       markers.push(marker);
       function onClickEvent(i){
-        return function(e){
+        return function(){
           dispatch(openWhiteboard());
           dispatch(setLookingPlace(places[i]));
           dispatch(setLookingMarker(markers[i]));
@@ -144,6 +158,31 @@ function Map(){
       naver.maps.Event.addListener(marker, 'click', onClickEvent(i));
     }
   }, [places]);
+
+  useEffect(() => {
+    if(heatmap===null) return;
+
+    for(var i=0; i<places.length; i++){
+      var weight = 0;
+      if(underage&&man){
+        weight+=places[i].stamp.UM;
+      }
+      if(underage&&woman){
+        weight+=places[i].stamp.UW;
+      }
+      if(adult&&man){
+        weight+=places[i].stamp.AM;
+      }
+      if(adult&&woman){
+        weight+=places[i].stamp.AW;
+      }
+      
+      weights[i].weight = weight/100000;
+    }
+
+    heatmap.setData(weights);
+    heatmap.redraw();
+  }, [underage, adult, man, woman]);
 
   return (
     <Container ref={mapElement} maxWidth={false} sx={{width: 1, height: 1, m: 0, p: 0}}>
