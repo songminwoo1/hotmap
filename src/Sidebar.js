@@ -13,7 +13,7 @@ import CommBoard from "./community/CommBoard";
 import UserWriter from "./UserWriter";
 import './Sidebar.css';
 
-import { GetCommunity } from "./db/BackEnd";
+import { GetCommunity, VoteTagUp, VoteTagDown } from "./db/BackEnd";
 
 export var current_sidebar_pinId = 'carrot';
 
@@ -26,9 +26,10 @@ function Sidebar(props) {
   });
   
   //디버깅용.
-  const  lookingPlace  = useSelector(state => state.lookingPlace.lookingPlaceState);
-  const  lookingMarker  = useSelector(state => state.lookingPlace.lookingMarkerState);
-  console.log(lookingPlace, lookingMarker);
+  // const  lookingPlace  = useSelector(state => state.lookingPlace.lookingPlaceState);
+  // const  lookingMarker  = useSelector(state => state.lookingPlace.lookingMarkerState);
+  // console.log("that");
+  // console.log(lookingPlace, lookingMarker);
 
   const [newTag, setNewTag] = useState('other tags');
   const handleChange = (event) => {
@@ -36,31 +37,6 @@ function Sidebar(props) {
   };
 
   const [community, setCommunity] = useState({
-    // deadbeef: {
-    //   pinId: 'f1920dj2',
-    //   place: '참치아울렛 만년점',
-    //   title: 'new menu',
-    //   body: 'The new menu "rosted carrot" was so good',
-    //   time: Date.now() - 2000,
-    //   level: 42,
-    // },
-    // deadbee0: {
-    //   pinId: 'f1920dj2',
-    //   place: '참치아울렛 만년점',
-    //   title: 'cat 고양이 고양이 고양이 고양이 고양이 고양이 고양이 고양이 고양이 고양이',
-    //   body: 'was sleeping under the window. 고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이고양이',
-    //   time: Date.now() - 300000,
-    //   level: 25,
-    // },
-    // beef1001: {
-    //   pinId: 'f83jh1u1',
-    //   place: '칠구치킨',
-    //   title: 'no potato',
-    //   body: 'gimme da potato',
-    //   time: Date.now() - 10000000,
-    //   level: 13,
-    // }
-
     dummy: {
       pinId: '',
       place: '',
@@ -107,7 +83,7 @@ function Sidebar(props) {
                         whiteSpace: 'normal',
                       },
                     }}
-                    label={<div id="chipwrap"><div className="chipplus"><div className="chipplus-in">+</div></div> <div id="chipmain">{ key + '|' + value }</div> <div className="chipplus"><div className="chipplus-in">-</div></div></div>} 
+                    label={<div id="chipwrap"><div className="chipplus" onClick={()=>VoteTagUp(current_sidebar_pinId, key, props.usrId, ()=>console.log('up'))}><div className="chipplus-in">+</div></div> <div id="chipmain">{ key + '|' + value }</div> <div className="chipplus" onClick={()=>VoteTagDown(current_sidebar_pinId, key, props.usrId, ()=>console.log('up'))}><div className="chipplus-in">-</div></div></div>} 
                   />
                 )
               )
@@ -115,38 +91,38 @@ function Sidebar(props) {
             </Stack>
             <Box id="tags-dropdown">
               <div id="tags-dropdown-inner">
-<Chip
-  color="primary" variant="outlined"
-  sx={{
-    height: '24px',
-    borderColor: '#FF6666',
-    color: 'black',
-    '& .MuiChip-label': {
-      display: 'block',
-      whiteSpace: 'normal',
-    },
-  }}
-  label={<div id="chipwrap">
-  <div className="chipplus"><div className="chipplus-in">+</div></div>
-  <FormControl variant="standard" sx={{ m: 0, fontSize: "8px" }} size="small" fontSize="4px">
-    <Select
-      labelId="demo-simple-select-standard-label"
-      id="demo-simple-select-standard"
-      value={newTag}
-      onChange={handleChange}
-      label="Age"
-      sx={{fontSize:'14px', padding:0, height:'20px', top:'2px'}}
-    >
-      <MenuItem value={10} fontSize="5px">None</MenuItem>
-      <MenuItem value={20}>Ten</MenuItem>
-      <MenuItem value={30}>Twenty</MenuItem>
-      <MenuItem value={40}>Thirty</MenuItem>
-    </Select>
-  </FormControl>
-  <div id="chipsel" className="chipplus"><div className="chipplus-in">|{0}</div></div>
-  <div className="chipplus"><div className="chipplus-in">-</div></div>
-  </div>} 
-/>
+                <Chip
+                  color="primary" variant="outlined"
+                  sx={{
+                    height: '24px',
+                    borderColor: '#FF6666',
+                    color: 'black',
+                    '& .MuiChip-label': {
+                      display: 'block',
+                      whiteSpace: 'normal',
+                    },
+                  }}
+                  label={<div id="chipwrap">
+                  <div className="chipplus"><div className="chipplus-in">+</div></div>
+                  <FormControl variant="standard" sx={{ m: 0, marginLeft:'4px' }} size="small" fontSize="4px">
+                    <Select
+                      labelId="demo-simple-select-standard-label"
+                      id="demo-simple-select-standard"
+                      value={newTag}
+                      onChange={handleChange}
+                      label="Age"
+                      sx={{fontSize:'12px', fontFamily:"'Roboto Mono', monospace", padding:0, height:'20px', top:'2px'}}
+                    >
+                      <MenuItem value={10} fontSize="5px">None</MenuItem>
+                      <MenuItem value={20}>Ten</MenuItem>
+                      <MenuItem value={30}>Twenty</MenuItem>
+                      <MenuItem value={40}>Thirty</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <div id="chipsel" className="chipplus"><div className="chipplus-in">|{0}</div></div>
+                  <div className="chipplus"><div className="chipplus-in">-</div></div>
+                  </div>} 
+                />
               </div>
             </Box>
             {/* <Box sx={{position:'absolute', bottom:'0px', width:'100%', display:'flex', justifyContent:'center',

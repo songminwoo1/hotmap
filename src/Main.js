@@ -94,7 +94,7 @@ function Main(){
 
       <TopUI age={age} setAge={setAge} gender={gender} setGender={setGender}></TopUI>
       <Map></Map>
-      <Sidebar pinId={'someid000'}></Sidebar>
+      <Sidebar pinId={'someid000'} usrId={cookies.UID}></Sidebar>
       <AddPlace></AddPlace>
     </Container>
   );

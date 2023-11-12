@@ -63,3 +63,24 @@ DB.read('community/',
         }
     }
 );
+
+export const GetTags = (pinId, onload) =>
+DB.read('tags/' + pinId + '/', 
+    (data) => 
+    {
+        var result = {};
+        for (const [key, value] of Object.entries(data)) { //tag and usr-point object
+            var pt_ac = 0;
+            for (const [usr, pt] of Object.entries(value)) { //tag and usr-point object
+                pt_ac += pt;
+            }
+            result[key] = value
+        }
+    }
+);
+
+export const VoteTagUp = (pinId, tag, usrId, onload) =>
+    DB.write('tags/' + pinId + '/' + tag + '/' + usrId + '/', 1, onload);
+
+export const VoteTagDown = (pinId, tag, usrId, onload) =>
+    DB.write('tags/' + pinId + '/' + tag + '/' + usrId + '/', -1, onload);
