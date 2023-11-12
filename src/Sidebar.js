@@ -38,9 +38,6 @@ const getTopTags = (allTags) =>
 function Sidebar(props) {
   const dispatch = useDispatch();
   const  sidebar  = useSelector(state => state.sidebar.sidebarState);
-  const [place, setPlace] = useState({
-    name: '참치아울렛 만년점',
-  });
   const [tags, setTags] = useState(
     {none:0} //must be sorted when set
   )
@@ -94,7 +91,7 @@ function Sidebar(props) {
 
           <Box sx={{width: '100%', height: '15%', minHeight: '100px', margin: '0', padding: '0', position:'relative'}}>
             <Box id='bar-title' sx={{width: '100%', bgcolor: '#FFF4EC'}}>
-              {place.name}
+              {props.pinName}
             </Box>
             <Stack direction="row" justifyContent="center" spacing={1}>
             {
@@ -205,7 +202,7 @@ function Sidebar(props) {
           </Box>
 
           <Box sx={{width: '100%', height: '230px', backgroundColor:'#FFF4EC'}}>
-            <UserWriter pinId={props.pinId} place={place.name} refresh={update} />
+            <UserWriter pinId={props.pinId} place={props.pinName} refresh={update} />
           </Box>
 
         </Box>
