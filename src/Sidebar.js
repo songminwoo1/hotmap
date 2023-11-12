@@ -104,7 +104,10 @@ function Sidebar(props) {
   const top_tags = getTopTags(tags);
 
   const getUserT = () => {
-    return "MR";
+    const is_adult = cookies.age === "adult";
+    const is_man = cookies.gender === "man";
+
+    return is_adult && is_man ? "AM" : is_adult ? "AW" : is_man ? "CM" : "CW";
   }
 
   return (
