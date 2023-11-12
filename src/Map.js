@@ -14,11 +14,11 @@ const naver = window.naver;
 
 //pin definition
 var tmp = [
-  {'ID': 1234, 'name': '한기원', 'LatLng': {'x': 127.360221, 'y': 36.3954377, '_lat': 36.3954377, '_lng': 127.360221}, 'stamp': {'UM': 5, 'UW': 7, 'AM': 3, 'AW': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.355221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.355221}, 'stamp': {'UM': 8, 'UW': 12, 'AM': 11, 'AW': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.375221, 'y': 36.3744377, '_lat': 36.3744377, '_lng': 127.375221}, 'stamp': {'UM': 5, 'UW': 17, 'AM': 13, 'AW': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.335221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.335221}, 'stamp': {'UM': 10, 'UW': 9, 'AM': 13, 'AW': 6}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.350221, 'y': 36.3764377, '_lat': 36.3764377, '_lng': 127.350221}, 'stamp': {'UM': 8, 'UW': 4, 'AM': 4, 'AW': 8}},
+  {'ID': 1234, 'name': '한기원', 'LatLng': {'x': 127.360221, 'y': 36.3954377, '_lat': 36.3954377, '_lng': 127.360221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.355221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.355221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.375221, 'y': 36.3744377, '_lat': 36.3744377, '_lng': 127.375221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.335221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.335221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.350221, 'y': 36.3764377, '_lat': 36.3764377, '_lng': 127.350221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
 ]
 
 //https://4sii.tistory.com/424
@@ -29,8 +29,18 @@ function Map({underage, adult, man, woman}){
   const sidebarState = useSelector(state => state.sidebar.sidebarState);
   const text = useSelector(state => state.sidebar.text);
   const [temporaryLocation, setTemporaryLocation] = useState(null);
+  const [hotplace, setHotplace] = useState({
+    updated: false,
+  })
 
+  const updatePinList = () => {
+    GetPinList((new_pin_data) => {
+      console.log('Updated Pin List:', new_pin_data);
+      setPlaces(new_pin_data);
+    })
+  }
   
+
   
 
   useEffect(() => {
@@ -53,12 +63,13 @@ function Map({underage, adult, man, woman}){
       zoomControl: true,
       zoomControlOptions: { position: naver.maps.Position.LEFT_BOTTOM }
     };
+    console.log(places);
 
     //지도 생성
     map = new naver.maps.Map(mapElement.current, mapOptions);
 
     //열지도 추가
-    for(var i=0; i<places.length; i++){
+        for(var i=0; i<places.length; i++){
       var weight = 0;
       if(underage&&man){
         weight+=places[i].stamp.UM;
@@ -74,7 +85,7 @@ function Map({underage, adult, man, woman}){
       }
       weights.push(new naver.maps.visualization.WeightedLocation(places[i].LatLng._lat, places[i].LatLng._lng, weight/100000));
     }
-
+    
     naver.maps.onJSContentLoaded = function() {
       heatmap = new naver.maps.visualization.HeatMap({
           map: map,
@@ -92,6 +103,7 @@ function Map({underage, adult, man, woman}){
           markers[i].setOptions({visible: false});
         }
         heatmap.setOptions('opacity', 1);
+        
       }
       else{ //show marker map
         for(var i=0; i<markers.length; i++){
@@ -130,10 +142,9 @@ function Map({underage, adult, man, woman}){
         map,
       });
       // Change the state to 'none' after adding the pin
-      AddPin({name: text, LatLng: temporaryLocation}, () => {
-        dispatch(closeSidebar());
-        setTemporaryLocation(null);
-      });
+      AddPin({name: text, LatLng: temporaryLocation}, updatePinList);
+      dispatch(closeSidebar());
+      setTemporaryLocation(null); //db에서 가져와야 하는 데이터를 state로
     }
   }, [sidebarState, temporaryLocation]);
 
