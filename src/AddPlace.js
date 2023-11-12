@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { Box, Button, IconButton, Modal, TextField } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
 import NotListedLocationIcon from '@mui/icons-material/NotListedLocation';
 
 

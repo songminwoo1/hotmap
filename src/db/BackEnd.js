@@ -7,6 +7,9 @@ export const AddWhiteboardStamp = (board_id, x_coord, y_coord, data, onpush) =>
         data: data
     },onpush);
 
+export const AddStampToPin = (board_id, user_t) =>
+    DB.append('temp/pin/' + board_id + '/stamp/' + user_t + '/', 0);
+
 export const LoadWhiteboard = (board_id, onload) =>
     DB.read('whiteboard/' + board_id, 
         (data) => 
@@ -63,3 +66,35 @@ DB.read('community/',
         }
     }
 );
+
+export const GetTags = (pinId, onload) =>
+DB.read('tags/' + pinId + '/', 
+    (data) =>
+    {
+        if(data == null)
+        {
+            onload({});
+        }
+        else
+        {
+            var result = {};
+            for (const [key, value] of Object.entries(data)) { //tag and usr-point object
+                var pt_ac = 0;
+                for (const [usr, pt] of Object.entries(value)) { //tag and usr-point object
+                    pt_ac += pt;
+                }
+                result[key] = pt_ac;
+            }
+            onload(result);
+        }
+    }
+);
+//{sushi:32, quiet:15, expensive: 10}
+
+export const VoteTagUp = (pinId, tag, usrId, onload) =>
+    DB.write('tags/' + pinId + '/' + tag + '/' + usrId + '/', 1, onload);
+
+export const VoteTagDown = (pinId, tag, usrId, onload) =>
+    DB.write('tags/' + pinId + '/' + tag + '/' + usrId + '/', -1, onload);
+
+    

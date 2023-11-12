@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Amatic+SC&family=Nunito:wght@400;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Amatic+SC&family=Nunito:wght@400;700;800&display=swap');
 
 #bar-title {
     font-family: 'Dongle', sans-serif;
@@ -17,19 +17,45 @@
 
 #chipwrap {
     display: flex;
-    height: fit-content;
+    height: 20px;
+    align-items: center;
     
+    font-family: 'Roboto Mono', monospace;
     margin: 0;
+    margin-bottom: 1px;
     padding: 0;
 }
 
-#chipplus {
-    height: 100%;
+.chipplus {
+    height: 16px;
     color:black;
     background: transparent;
+
+    display: flex;
+    cursor: pointer;
+}
+
+.chipplus-in {
+    height: 18px;
+    background-color:lightblue;
+    border-radius: 6px;
+
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+#chipsel {
+    margin-right: 5px;
+    cursor: auto;
 }
 
 #chipmain {
     padding-left: 5px;
     padding-right: 5px;
+}
+
+#tags-dropdown {
+    display: flex;
+    justify-content: center;
+    padding-top: 5px;
 }

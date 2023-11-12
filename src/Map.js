@@ -27,6 +27,7 @@ function Map({underage, adult, man, woman}){
   const dispatch = useDispatch();
   const mapElement = useRef(null);
   const sidebarState = useSelector(state => state.sidebar.sidebarState);
+  const text = useSelector(state => state.sidebar.text);
   const [temporaryLocation, setTemporaryLocation] = useState(null);
 
   
@@ -129,7 +130,7 @@ function Map({underage, adult, man, woman}){
         map,
       });
       // Change the state to 'none' after adding the pin
-      AddPin({data: temporaryLocation}, () => {
+      AddPin({name: text, LatLng: temporaryLocation}, () => {
         dispatch(closeSidebar());
         setTemporaryLocation(null);
       });
