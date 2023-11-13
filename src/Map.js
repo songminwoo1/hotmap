@@ -14,11 +14,11 @@ const naver = window.naver;
 
 //pin definition
 var tmp = [
-  {'ID': 1234, 'name': '한기원', 'LatLng': {'x': 127.360221, 'y': 36.3954377, '_lat': 36.3954377, '_lng': 127.360221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.355221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.355221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.375221, 'y': 36.3744377, '_lat': 36.3744377, '_lng': 127.375221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.335221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.335221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.350221, 'y': 36.3764377, '_lat': 36.3764377, '_lng': 127.350221}, 'stamp': {'under-age': 5, 'adult': 7, 'men': 3, 'women': 9}},
+  {'ID': 1234, 'name': '한기원', 'LatLng': {'x': 127.360221, 'y': 36.3954377, '_lat': 36.3954377, '_lng': 127.360221}, 'stamp': {'UM': 5, 'UW': 7, 'AM': 3, 'AW': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.355221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.355221}, 'stamp': {'UM': 5, 'UW': 7, 'AM': 3, 'AW': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.375221, 'y': 36.3744377, '_lat': 36.3744377, '_lng': 127.375221}, 'stamp': {'UM': 5, 'UW': 7, 'AM': 3, 'AW': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.335221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.335221}, 'stamp': {'UM': 5, 'UW': 7, 'AM': 3, 'AW': 9}},
+  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.350221, 'y': 36.3764377, '_lat': 36.3764377, '_lng': 127.350221}, 'stamp': {'UM': 5, 'UW': 7, 'AM': 3, 'AW': 9}},
 ]
 
 //https://4sii.tistory.com/424
@@ -139,7 +139,7 @@ function Map({underage, adult, man, woman}){
         map,
       });
       // Change the state to 'none' after adding the pin
-      AddPin({name: text, LatLng: temporaryLocation, stamp: {'under-age': 0, 'adult': 0, 'men': 0, 'women': 0}}, updatePinList);
+      AddPin({name: text, LatLng: temporaryLocation, stamp: {'UM': 0, 'UW': 0, 'AM': 0, 'AW': 0}}, updatePinList);
       markers.push(newmarker);
       dispatch(closeSidebar());
       setTemporaryLocation(null); //db에서 가져와야 하는 데이터를 state로
