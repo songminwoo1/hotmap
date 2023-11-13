@@ -130,19 +130,20 @@ function Map({underage, adult, man, woman}){
     //weights 갱신
     if(heatmap===null) return;
     weights=[];
+
     for(var i=0; i<Object.keys(places).length; i++){
-      var weight = 0;
+      var weight = 1; //heatmap cognize weight=0 as none-weight, so weight=0 become max-weight
       if(underage&&man){
-        weight+=places[Object.keys(places)[i]].stamp.UM;
+        weight+=Object.keys(places[Object.keys(places)[i]].stamp.UM).length;
       }
       if(underage&&woman){
-        weight+=places[Object.keys(places)[i]].stamp.UW;
+        weight+=Object.keys(places[Object.keys(places)[i]].stamp.UW).length;
       }
       if(adult&&man){
-        weight+=places[Object.keys(places)[i]].stamp.AM;
+        weight+=Object.keys(places[Object.keys(places)[i]].stamp.AM).length
       }
       if(adult&&woman){
-        weight+=places[Object.keys(places)[i]].stamp.AW;
+        weight+=Object.keys(places[Object.keys(places)[i]].stamp.AW).length;
       }
       weights.push(new naver.maps.visualization.WeightedLocation(places[Object.keys(places)[i]].LatLng._lat, places[Object.keys(places)[i]].LatLng._lng, weight/100000));
     }
@@ -158,16 +159,16 @@ function Map({underage, adult, man, woman}){
     for(var i=0; i<Object.keys(places).length; i++){
       var weight = 0;
       if(underage&&man){
-        weight+=places[Object.keys(places)[i]].stamp.UM;
+        weight+=Object.keys(places[Object.keys(places)[i]].stamp.UM).length;
       }
       if(underage&&woman){
-        weight+=places[Object.keys(places)[i]].stamp.UW;
+        weight+=Object.keys(places[Object.keys(places)[i]].stamp.UW).length;
       }
       if(adult&&man){
-        weight+=places[Object.keys(places)[i]].stamp.AM;
+        weight+=Object.keys(places[Object.keys(places)[i]].stamp.AM).length
       }
       if(adult&&woman){
-        weight+=places[Object.keys(places)[i]].stamp.AW;
+        weight+=Object.keys(places[Object.keys(places)[i]].stamp.AW).length;
       }
       
       weights[i].weight = weight/100000;
