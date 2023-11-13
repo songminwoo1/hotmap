@@ -65,8 +65,11 @@ function Sidebar(props) {
   const [tags, setTags] = useState(
     {none:0} //must be sorted when set
   )
+  
+  const  lookingPlace  = useSelector(state => state.lookingPlace.lookingPlaceState);
+  const  lookingMarker  = useSelector(state => state.lookingPlace.lookingMarkerState);
   const updateTags = () => {
-    GetTags(props.pinId, setTags);
+    GetTags(lookingPlace.ID, setTags);
   }
   
   if(tags["none"] !== undefined)
@@ -75,8 +78,6 @@ function Sidebar(props) {
   }
   
   //디버깅용.
-  const  lookingPlace  = useSelector(state => state.lookingPlace.lookingPlaceState);
-  const  lookingMarker  = useSelector(state => state.lookingPlace.lookingMarkerState);
   console.log("llll");
   console.log(lookingPlace);
   console.log(lookingMarker);
@@ -118,13 +119,13 @@ function Sidebar(props) {
     >
       <Box sx={{width: '100%', height: 1, bgcolor: 'transparent', display:'flex'}}>
         <Box sx={{width: '75%', height: 1, bgcolor: 'transparent'}}>
-          <Whiteboard whiteboardid={props.pinId} punch={()=>addStampCookie(props.pinId)} user_t={getUserT()}></Whiteboard>
+          <Whiteboard whiteboardid={lookingPlace.ID} punch={()=>addStampCookie(lookingPlace.ID)} user_t={getUserT()}></Whiteboard>
         </Box>
         <Box sx={{width: '25%', minWidth:'450px', height: 1, bgcolor: '#FFF4EC', flexDirection: 'column'}}>
 
           <Box sx={{width: '100%', height: '15%', minHeight: '100px', margin: '0', padding: '0', position:'relative'}}>
             <Box id='bar-title' sx={{width: '100%', bgcolor: '#FFF4EC'}}>
-              {props.pinName}
+              {lookingPlace.name}
             </Box>
             <Stack direction="row" justifyContent="center" spacing={1}>
             {
@@ -143,7 +144,7 @@ function Sidebar(props) {
                         whiteSpace: 'normal',
                       },
                     }}
-                    label={<div id="chipwrap"><div className="chipplus" onClick={()=>VoteTagUp(props.pinId, key, props.usrId, updateTags)}><div className="chipplus-in">+</div></div> <div id="chipmain">{ key + '|' + value }</div> <div className="chipplus" onClick={()=>VoteTagDown(props.pinId, key, props.usrId, updateTags)}><div className="chipplus-in">-</div></div></div>} 
+                    label={<div id="chipwrap"><div className="chipplus" onClick={()=>VoteTagUp(lookingPlace.ID, key, props.usrId, updateTags)}><div className="chipplus-in">+</div></div> <div id="chipmain">{ key + '|' + value }</div> <div className="chipplus" onClick={()=>VoteTagDown(lookingPlace.ID, key, props.usrId, updateTags)}><div className="chipplus-in">-</div></div></div>} 
                   />
                 )
               )
@@ -165,7 +166,7 @@ function Sidebar(props) {
                   label={<div id="chipwrap">
                   <div className="chipplus" onClick={()=>{
                     if(newTag !== 'err')
-                      VoteTagUp(props.pinId, newTag, props.usrId, updateTags);
+                      VoteTagUp(lookingPlace.ID, newTag, props.usrId, updateTags);
                   }}><div className="chipplus-in">+</div></div>
                   <FormControl variant="standard" sx={{ m: 0, marginLeft:'4px' }} size="small" fontSize="4px">
                     <Select
@@ -193,7 +194,7 @@ function Sidebar(props) {
                   }</div></div>
                   <div className="chipplus" onClick={()=>{
                     if(newTag !== 'err')
-                      VoteTagDown(props.pinId, newTag, props.usrId, updateTags);
+                      VoteTagDown(lookingPlace.ID, newTag, props.usrId, updateTags);
                   }}><div className="chipplus-in">-</div></div>
                   </div>} 
                 />
@@ -230,12 +231,12 @@ function Sidebar(props) {
           }}>
             <CommBoard data={community} condition={(post)=>
             {
-              return post.pinId === props.pinId;
+              return post.pinId === lookingPlace.ID;
             }}/>
           </Box>
 
           <Box sx={{width: '100%', height: '230px', backgroundColor:'#FFF4EC'}}>
-            <UserWriter pinId={props.pinId} place={props.pinName} refresh={update} level={cookies.stampCount[props.pinId]}/>
+            <UserWriter pinId={lookingPlace.ID} place={lookingPlace.name} refresh={update} level={cookies.stampCount[lookingPlace.ID]}/>
           </Box>
 
         </Box>
