@@ -164,7 +164,7 @@ function Map({underage, adult, man, woman}){
       function onClickEvent(i){
         return function(){
           dispatch(openWhiteboard());
-          dispatch(setLookingPlace(Object.keys(places)[i]));
+          dispatch(setLookingPlace(places[Object.keys(places)[i]]));
           dispatch(setLookingMarker(markers[i]));
         }
       };
