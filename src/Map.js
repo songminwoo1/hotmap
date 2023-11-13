@@ -12,15 +12,6 @@ var markers = [];
 var weights = [];
 const naver = window.naver;
 
-//pin definition
-var tmp = [
-  {'ID': 1234, 'name': '한기원', 'LatLng': {'x': 127.360221, 'y': 36.3954377, '_lat': 36.3954377, '_lng': 127.360221}, 'stamp': {'UM': 5, 'UW': 7, 'AM': 3, 'AW': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.355221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.355221}, 'stamp': {'UM': 5, 'UW': 7, 'AM': 3, 'AW': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.375221, 'y': 36.3744377, '_lat': 36.3744377, '_lng': 127.375221}, 'stamp': {'UM': 5, 'UW': 7, 'AM': 3, 'AW': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.335221, 'y': 36.3754377, '_lat': 36.3754377, '_lng': 127.335221}, 'stamp': {'UM': 5, 'UW': 7, 'AM': 3, 'AW': 9}},
-  {'ID': 4321, 'name': '투썸', 'LatLng': {'x': 127.350221, 'y': 36.3764377, '_lat': 36.3764377, '_lng': 127.350221}, 'stamp': {'UM': 5, 'UW': 7, 'AM': 3, 'AW': 9}},
-]
-
 //https://4sii.tistory.com/424
 function Map({underage, adult, man, woman}){
   const [places, setPlaces] = useState(null);
@@ -45,7 +36,6 @@ function Map({underage, adult, man, woman}){
 
     //파이어베이스에서 데이터 받기
     GetPinList((data)=>setPlaces(data));
-    GetPinList((data)=>console.log(data));
 
     //지도 생성
     const location = new naver.maps.LatLng(36.3721427, 127.36039);
@@ -63,7 +53,7 @@ function Map({underage, adult, man, woman}){
     map = new naver.maps.Map(mapElement.current, mapOptions);
 
     //열지도 추가
-    naver.maps.onJSContentLoaded = function() {
+    naver.maps.Event.once(map, 'init', function() {
       heatmap = new naver.maps.visualization.HeatMap({
           map: map,
           data: weights,
@@ -88,7 +78,7 @@ function Map({underage, adult, man, woman}){
           heatmap.setOptions('opacity', 0);
         }
       });
-    };
+    });
     
     //클릭 시 핫플 추가 창
     naver.maps.Event.addListener(map, 'click', (e) => {
@@ -125,13 +115,12 @@ function Map({underage, adult, man, woman}){
         options: {visible: false}
       });
       markers.push(marker);
-      console.log("place info:", places[Object.keys(places)[i]].name);
+      console.log("place info:", places[Object.keys(places)[i]]);
       function onClickEvent(i){
         return function(){
           dispatch(openWhiteboard());
           dispatch(setLookingPlaceId(Object.keys(places)[i]));
           dispatch(setLookingPlace(places[Object.keys(places)[i]]));
-          console.log(Object.keys(places)[i])
           dispatch(setLookingMarker(markers[i]));
         }
       };
