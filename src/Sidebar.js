@@ -66,6 +66,7 @@ function Sidebar(props) {
     {none:0} //must be sorted when set
   )
   
+  const  lookingIdPlace  = useSelector(state => state.lookingPlace.lookingPlaceIdState);
   const  lookingPlace  = useSelector(state => state.lookingPlace.lookingPlaceState);
   const  lookingMarker  = useSelector(state => state.lookingPlace.lookingMarkerState);
   const updateTags = () => {
@@ -79,6 +80,7 @@ function Sidebar(props) {
   
   //디버깅용.
   console.log("llll");
+  console.log(lookingIdPlace);
   console.log(lookingPlace);
   console.log(lookingMarker);
   console.log("hhhh")

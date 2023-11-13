@@ -3,10 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 export const lookingPlaceSlice = createSlice({
   name: 'lookingPlace',
   initialState: {
+    lookingPlaceIdState: 'none',
     lookingPlaceState: 'none',
     lookingMarkerState: 'none',
   },
   reducers: {
+    setLookingPlaceId: (state, action) => {
+      state.lookingPlaceIdState = action.payload;
+    },
     setLookingPlace: (state, action) => {
       state.lookingPlaceState = action.payload;
     },
@@ -17,6 +21,7 @@ export const lookingPlaceSlice = createSlice({
 });
 
 export const {
+  setLookingPlaceId,
   setLookingPlace,
   setLookingMarker
 } = lookingPlaceSlice.actions

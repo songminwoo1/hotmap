@@ -2,7 +2,7 @@ import { Box, Container, } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeSidebar, openAddPlace, openWhiteboard, readyAddPlace } from './sliceSidebar';
-import { setLookingPlace, setLookingMarker } from './sliceLookingPlace';
+import { setLookingPlaceId, setLookingPlace, setLookingMarker } from './sliceLookingPlace';
 import { AddPin, GetPinList } from "./db/BackEnd";
 import * as db from './db/BackEnd';
 
@@ -129,7 +129,9 @@ function Map({underage, adult, man, woman}){
       function onClickEvent(i){
         return function(){
           dispatch(openWhiteboard());
-          dispatch(setLookingPlace(Object.keys(places)[i]));
+          dispatch(setLookingPlaceId(Object.keys(places)[i]));
+          dispatch(setLookingPlace(places[Object.keys(places)[i]]));
+          console.log(Object.keys(places)[i])
           dispatch(setLookingMarker(markers[i]));
         }
       };
