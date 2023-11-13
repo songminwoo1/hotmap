@@ -23,7 +23,7 @@ var tmp = [
 
 //https://4sii.tistory.com/424
 function Map({underage, adult, man, woman}){
-  const [places, setPlaces] = useState(tmp);
+  const [places, setPlaces] = useState({'ID1': {'LatLng': {'_lat': 36.3954377, '_lng': 127.360221}, 'name': '한기원', 'stamp': {}}, 'ID2': {'LatLng': {'_lat': 36.3754377, '_lng': 127.355221}, 'name': '투썸', 'stamp': {}}});
   const dispatch = useDispatch();
   const mapElement = useRef(null);
   const sidebarState = useSelector(state => state.sidebar.sidebarState);
@@ -80,7 +80,7 @@ function Map({underage, adult, man, woman}){
       if(adult&&woman){
         weight+=places[Object.keys(places)[i]].stamp.AW;
       }
-      weights.push(new naver.maps.visualization.WeightedLocation(places[i].LatLng._lat, places[i].LatLng._lng, weight/100000));
+      weights.push(new naver.maps.visualization.WeightedLocation(places[Object.keys(places)[i]].LatLng._lat, places[Object.keys(places)[i]].LatLng._lng, weight/100000));
     }
     
     naver.maps.onJSContentLoaded = function() {
@@ -95,7 +95,7 @@ function Map({underage, adult, man, woman}){
 
     //zoom 정도에 따른 지도 변경
     naver.maps.Event.addListener(map, 'zoom_changed', function(zoom) {
-      if(zoom<=0){ //show heat map
+      if(zoom<=15){ //show heat map
         for(var i=0; i<markers.length; i++){
           markers[i].setOptions({visible: false});
         }
@@ -170,6 +170,28 @@ function Map({underage, adult, man, woman}){
       };
       naver.maps.Event.addListener(marker, 'click', onClickEvent(i));
     }
+
+    if(heatmap===null) return;
+    weights=[];
+    for(var i=0; i<Object.keys(places).length; i++){
+      var weight = 0;
+      if(underage&&man){
+        weight+=places[Object.keys(places)[i]].stamp.UM;
+      }
+      if(underage&&woman){
+        weight+=places[Object.keys(places)[i]].stamp.UW;
+      }
+      if(adult&&man){
+        weight+=places[Object.keys(places)[i]].stamp.AM;
+      }
+      if(adult&&woman){
+        weight+=places[Object.keys(places)[i]].stamp.AW;
+      }
+      weights.push(new naver.maps.visualization.WeightedLocation(places[Object.keys(places)[i]].LatLng._lat, places[Object.keys(places)[i]].LatLng._lng, weight/100000));
+    }
+
+    heatmap.setData(weights);
+    heatmap.redraw();
   }, [places]);
 
   useEffect(() => {
