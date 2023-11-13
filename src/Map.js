@@ -66,19 +66,19 @@ function Map({underage, adult, man, woman}){
     map = new naver.maps.Map(mapElement.current, mapOptions);
 
     //열지도 추가
-    for(var i=0; i<places.length; i++){
+    for(var i=0; i<Object.keys(places).length; i++){
       var weight = 0;
       if(underage&&man){
-        weight+=places[i].stamp.UM;
+        weight+=places[Object.keys(places)[i]].stamp.UM;
       }
       if(underage&&woman){
-        weight+=places[i].stamp.UW;
+        weight+=places[Object.keys(places)[i]].stamp.UW;
       }
       if(adult&&man){
-        weight+=places[i].stamp.AM;
+        weight+=places[Object.keys(places)[i]].stamp.AM;
       }
       if(adult&&woman){
-        weight+=places[i].stamp.AW;
+        weight+=places[Object.keys(places)[i]].stamp.AW;
       }
       weights.push(new naver.maps.visualization.WeightedLocation(places[i].LatLng._lat, places[i].LatLng._lng, weight/100000));
     }
@@ -95,7 +95,7 @@ function Map({underage, adult, man, woman}){
 
     //zoom 정도에 따른 지도 변경
     naver.maps.Event.addListener(map, 'zoom_changed', function(zoom) {
-      if(zoom<=17){ //show heat map
+      if(zoom<=0){ //show heat map
         for(var i=0; i<markers.length; i++){
           markers[i].setOptions({visible: false});
         }
