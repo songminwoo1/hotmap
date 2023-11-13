@@ -75,10 +75,12 @@ function Sidebar(props) {
   }
   
   //디버깅용.
-  // const  lookingPlace  = useSelector(state => state.lookingPlace.lookingPlaceState);
-  // const  lookingMarker  = useSelector(state => state.lookingPlace.lookingMarkerState);
-  // console.log("that");
-  // console.log(lookingPlace, lookingMarker);
+  const  lookingPlace  = useSelector(state => state.lookingPlace.lookingPlaceState);
+  const  lookingMarker  = useSelector(state => state.lookingPlace.lookingMarkerState);
+  console.log("llll");
+  console.log(lookingPlace);
+  console.log(lookingMarker);
+  console.log("hhhh")
 
   const [newTag, setNewTag] = useState('err');
   const handleChange = (event) => {
@@ -107,7 +109,7 @@ function Sidebar(props) {
     const is_adult = cookies.age === "adult";
     const is_man = cookies.gender === "man";
 
-    return is_adult && is_man ? "AM" : is_adult ? "AW" : is_man ? "CM" : "CW";
+    return is_adult && is_man ? "AM" : is_adult ? "AW" : is_man ? "UM" : "UW";
   }
 
   return (
