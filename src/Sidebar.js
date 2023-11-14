@@ -16,7 +16,7 @@ import './Sidebar.css';
 
 import { GetCommunity, VoteTagUp, VoteTagDown, GetTags } from "./db/BackEnd";
 
-const tag_t = ['cozy', 'casual', 'traditional', 'cheap', 'expensive', 'quiet', 'noisy', 'clean', 'dirty', 'night', 'day'];
+const tag_t = ['cozy', 'casual', 'traditional', 'cheap', 'expensive', 'quiet', 'noisy', 'clean', 'dirty', 'night', 'day', '-'];
 
 function sortKeysByValue(obj) {
   return Object.entries(obj)
@@ -35,6 +35,8 @@ const getTopTags = (allTags) =>
   }
   return result;
 } 
+
+var prev_lookingIdPlace = '';
 
 function Sidebar(props) {
   const [cookies, setCookie, removeCookie] = useCookies(['stampCount']);
@@ -62,20 +64,27 @@ function Sidebar(props) {
 
   const dispatch = useDispatch();
   const  sidebar  = useSelector(state => state.sidebar.sidebarState);
-  const [tags, setTags] = useState(
-    {none:0} //must be sorted when set
-  )
+  const [tags, setTags] = useState({
+    hmm:'hmm' //must be sorted when set
+  });
   
   const  lookingIdPlace  = useSelector(state => state.lookingPlace.lookingPlaceIdState);
   const  lookingPlace  = useSelector(state => state.lookingPlace.lookingPlaceState);
   const  lookingMarker  = useSelector(state => state.lookingPlace.lookingMarkerState);
-  const updateTags = () => {
+  const  updateTags = () => {
     GetTags(lookingIdPlace, setTags);
-  }
+  };
   
-  if(tags["none"] !== undefined)
+  if(tags["hmm"] !== undefined || prev_lookingIdPlace !== lookingIdPlace)
   {
+    console.log("tags update");
+    prev_lookingIdPlace = prev_lookingIdPlace;
     updateTags();
+  }
+  else
+  {
+    console.log("tags not update");
+    console.log(tags);
   }
   
   //디버깅용.
@@ -85,7 +94,7 @@ function Sidebar(props) {
   console.log(lookingMarker);
   console.log("hhhh")
 
-  const [newTag, setNewTag] = useState('err');
+  const [newTag, setNewTag] = useState('-');
   const handleChange = (event) => {
     setNewTag(event.target.value);
   };
@@ -167,7 +176,7 @@ function Sidebar(props) {
                   }}
                   label={<div id="chipwrap">
                   <div className="chipplus" onClick={()=>{
-                    if(newTag !== 'err')
+                    if(newTag !== '-')
                       VoteTagUp(lookingIdPlace, newTag, props.usrId, updateTags);
                   }}><div className="chipplus-in">+</div></div>
                   <FormControl variant="standard" sx={{ m: 0, marginLeft:'4px' }} size="small" fontSize="4px">
@@ -195,7 +204,7 @@ function Sidebar(props) {
                     (tags[newTag] === undefined) ? 0 : tags[newTag]
                   }</div></div>
                   <div className="chipplus" onClick={()=>{
-                    if(newTag !== 'err')
+                    if(newTag !== '-')
                       VoteTagDown(lookingIdPlace, newTag, props.usrId, updateTags);
                   }}><div className="chipplus-in">-</div></div>
                   </div>} 
