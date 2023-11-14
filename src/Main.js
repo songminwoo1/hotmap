@@ -68,12 +68,12 @@ function Main(){
           Personal Data
         </Typography>
         <FormLabel id="age-label" style={agelabelPosition} sx={Labelstyle}>Age</FormLabel>
-          <RadioGroup row onChange={(e)=>{setCookie('age', e.target.value, {path:'/', maxAge: 365*24*60*60})}} style={ageradioPosition}>
+          <RadioGroup row onChange={(e)=>{setCookie('age', e.target.value, {path:'/', maxAge: 365*24*60*60})}} style={ageradioPosition} sx={{width:250}}>
             <FormControlLabel value="under-age" control={<Radio sx={radioStyle} />} label="Under-age" />
             <FormControlLabel value="adult" control={<Radio sx={radioStyle} />} label="Adult" />
           </RadioGroup>
         <FormLabel id="gender-label" style={genderlabelPosition} sx={Labelstyle}>Gender</FormLabel>
-          <RadioGroup row onChange={(e)=>{setCookie('gender', e.target.value, {path:'/', maxAge: 365*24*60*60})}} style={genderradioPosition}>
+          <RadioGroup row onChange={(e)=>{setCookie('gender', e.target.value, {path:'/', maxAge: 365*24*60*60})}} style={genderradioPosition} sx={{width:250}}>
             <FormControlLabel value="man" control={<Radio sx={radioStyle} />} label="Man" />
             <FormControlLabel value="woman" control={<Radio sx={radioStyle} />} label="Woman" />
           </RadioGroup>
