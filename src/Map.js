@@ -62,22 +62,7 @@ function Map({underage, adult, man, woman}){
           colorMap: 'YIOrRd'
       });
       
-      //zoom 정도에 따른 지도 변경
-      naver.maps.Event.addListener(map, 'zoom_changed', function(zoom) {
-        if(zoom<=16){ //show heat map
-          for(var i=0; i<markers.length; i++){
-            markers[i].setOptions({visible: false});
-          }
-          heatmap.setOptions('opacity', 1);
-          
-        }
-        else{ //show marker map
-          for(var i=0; i<markers.length; i++){
-            markers[i].setOptions({visible: true});
-          }
-          heatmap.setOptions('opacity', 0);
-        }
-      });
+      
     });
     
     //클릭 시 핫플 추가 창
@@ -150,6 +135,23 @@ function Map({underage, adult, man, woman}){
 
     heatmap.setData(weights);
     heatmap.redraw();
+
+    //zoom 정도에 따른 지도 변경
+    naver.maps.Event.addListener(map, 'zoom_changed', function(zoom) {
+      if(zoom<=16){ //show heat map
+        for(var i=0; i<markers.length; i++){
+          markers[i].setOptions({visible: false});
+        }
+        heatmap.setOptions('opacity', 1);
+        
+      }
+      else{ //show marker map
+        for(var i=0; i<markers.length; i++){
+          markers[i].setOptions({visible: true});
+        }
+        heatmap.setOptions('opacity', 0);
+      }
+    });
   }, [places]);
 
   //버튼 눌리면 weights 갱신
