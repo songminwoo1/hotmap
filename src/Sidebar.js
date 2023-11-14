@@ -78,7 +78,7 @@ function Sidebar(props) {
   if(tags["hmm"] !== undefined || prev_lookingIdPlace !== lookingIdPlace)
   {
     console.log("tags update");
-    prev_lookingIdPlace = prev_lookingIdPlace;
+    prev_lookingIdPlace = lookingIdPlace;
     updateTags();
   }
   else
