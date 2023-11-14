@@ -61,8 +61,6 @@ function Map({underage, adult, man, woman}){
           radius: 15,
           colorMap: 'YIOrRd'
       });
-      
-      
     });
     
     //클릭 시 핫플 추가 창
@@ -90,17 +88,22 @@ function Map({underage, adult, man, woman}){
     //markers 갱신
     console.log('places type: ', typeof(places));
     console.log('place length: ', Object.keys(places).length);
+
+    for(var i=0; i<markers.length; i++){
+      markers[i].setMap(null);
+    }
     markers = [];
+    var zoom = map.getZoom();
     var len = Object.keys(places).length;
     for(var i=0; i<len; i++){
       //마커 생성후 마커 리스트에 추가
       var marker = new naver.maps.Marker({
         position: places[Object.keys(places)[i]].LatLng,
         map,
-        options: {visible: false}
+        options: {visible: zoom<16 ? false : true}
       });
+      //marker.setMap(map);
       markers.push(marker);
-      console.log("place info:", places[Object.keys(places)[i]]);
       function onClickEvent(i){
         return function(){
           dispatch(openWhiteboard());
