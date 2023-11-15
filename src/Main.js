@@ -13,7 +13,7 @@ function TopUI({underage, setUnderage, adult, setAdult, man, setMan, woman, setW
       <Box component="img" src="Logo.png"></Box>
       <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
         <Button variant ="contained" sx={{mr: 2, borderRadius: 30, bgcolor: underage ? 'white':'#DDDDDD', ':hover':{bgcolor: '#DDDDDD'}, color: 'black', fontSize: 16}} onClick={()=>{if(underage&&!adult){setAdult(true)}; setUnderage(!underage)}}>Under-Age</Button>
-        <Button variant ="contained" sx={{mr: 2, borderRadius: 30, bgcolor: adult ? 'white':'#DDDDDD', ':hover':{bgcolor: '#DDDDDD'}, color: 'black', fontSize: 16}} onClick={()=>{ if(!underage&&adult){setUnderage(true)}; setAdult(!adult)}}>Adult</Button>
+        <Button variant ="contained" sx={{mr: 6, borderRadius: 30, bgcolor: adult ? 'white':'#DDDDDD', ':hover':{bgcolor: '#DDDDDD'}, color: 'black', fontSize: 16}} onClick={()=>{ if(!underage&&adult){setUnderage(true)}; setAdult(!adult)}}>Adult</Button>
         <Button variant ="contained" sx={{mr: 2, borderRadius: 30, bgcolor: man ? 'white':'#DDDDDD', ':hover':{bgcolor: '#DDDDDD'}, color: 'black', fontSize: 16}} onClick={()=>{if(man&&!woman){setWoman(true)}; setMan(!man)}}>Men</Button>
         <Button variant ="contained" sx={{mr: 2, borderRadius: 30, bgcolor: woman ? 'white':'#DDDDDD', ':hover':{bgcolor: '#DDDDDD'}, color: 'black', fontSize: 16}} onClick={()=>{if(!man&&woman){setMan(true)}; setWoman(!woman)}}>Women</Button>
       </Box>
