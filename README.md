@@ -9,7 +9,8 @@ npm run start
 
 ### Project structure
 ```bash
-public                  # image files for stamps in whiteboard and index.html 
+public
+├─images                # stamps used on whiteboard
 └─index.html            # Getting Naver map API and fontawesome
 src
 ├─community             # Codes for comment
