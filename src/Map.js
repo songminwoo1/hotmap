@@ -22,7 +22,7 @@ function Map({underage, adult, man, woman}){
   const [temporaryLocation, setTemporaryLocation] = useState(null);
 
   function getMarkerIcon(weight, maxWeight){
-    return `<div style="font-size: 30px; color: rgb(255, ${102+(1-weight/maxWeight)*132}, ${102+(1-weight/maxWeight)*109})">
+    return `<div style="font-size: 30px; stroke: black; stroke-width: 10; color: rgb(255, ${102+(1-weight/maxWeight)*132}, ${102+(1-weight/maxWeight)*109})">
               <i class="fa-solid fa-location-dot"></i>
             </div>`
   }
