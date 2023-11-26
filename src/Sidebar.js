@@ -175,6 +175,7 @@ function Sidebar(props) {
                     },
                   }}
                   label={<div id="chipwrap">
+                  etc: 
                   <div className="chipplus" onClick={()=>{
                     if(newTag !== '-')
                       VoteTagUp(lookingIdPlace, newTag, props.usrId, updateTags);
