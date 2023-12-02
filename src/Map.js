@@ -169,6 +169,7 @@ function getMarkerIcon(weight, maxWeight){
   useEffect(() => {
     if(heatmap===null) return;
 
+    var maxWeight=0;
     for(var i=0; i<Object.keys(places).length; i++){
       var weight = 0;
       if(underage&&man){
@@ -183,12 +184,21 @@ function getMarkerIcon(weight, maxWeight){
       if(adult&&woman){
         weight+=Object.keys(places[Object.keys(places)[i]].stamp.AW).length;
       }
-      
       weights[i].weight = weight/100000;
-    }
 
+      if(maxWeight<weight) maxWeight = weight;
+    }
     heatmap.setData(weights);
     heatmap.redraw();
+
+    //마커 색갱신
+    for(var i=0; i<markers.length; i++){
+      markers[i].setIcon({
+          content: getMarkerIcon(weights[i].weight, maxWeight/100000),
+          size: new naver.maps.Size(22, 35),
+          anchor: new naver.maps.Point(11, 35)
+      });
+    }
   }, [underage, adult, man, woman]);
 
   return (
